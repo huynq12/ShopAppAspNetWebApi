@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ShopApp.Presentation</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ShopApp.Presentation.styles.css" asp-append-version="true" />
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="~/CustomerContent/css/bootstrap.min.css" />
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="~/CustomerContent/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="~/CustomerContent/css/slick-theme.css" />
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="~/CustomerContent/css/nouislider.min.css" />
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="~/CustomerContent/css/font-awesome.min.css">
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="~/CustomerContent/css/style.css" />
+</head>
+
+<body>
+
+    @await Html.PartialAsync("_Header")
+    @await Html.PartialAsync("_Navigation")
+    @RenderBody()
+	@await Html.PartialAsync("_Footer")
+	<!-- jQuery Plugins -->
+	<script src="~/CustomerContent/js/jquery.min.js"></script>
+	<script src="~/CustomerContent/js/bootstrap.min.js"></script>
+	<script src="~/CustomerContent/js/slick.min.js"></script>
+	<script src="~/CustomerContent/js/nouislider.min.js"></script>
+	<script src="~/CustomerContent/js/jquery.zoom.min.js"></script>
+	<script src="~/CustomerContent/js/main.js"></script>
+
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
