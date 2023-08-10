@@ -14,6 +14,10 @@ namespace ShopApp.Api.Data
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Category> Categories { get; set; }
 		public DbSet<ProductCategory> ProductCategories { get; set; }
+		public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+		public DbSet<CartItem> CartItems { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<OrderDetail> OrderDetail { get; set; }
 		
 		protected override void OnModelCreating(ModelBuilder model)
 		{
