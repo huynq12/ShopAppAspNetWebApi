@@ -52,8 +52,8 @@
 
 					<!-- Product details -->
 					<div class="col-md-5">
-						<div class="product-details">
-							<h2 class="product-name">ASUS ProArt StudioBook Pro 17 W700G1T-AV046T</h2>
+						<div class="product-details" id="product-details">
+							@* <h2 class="product-name">ASUS ProArt StudioBook Pro 17 W700G1T-AV046T</h2>
 							<div>
 								<div class="product-rating">
 									<i class="fa fa-star"></i>
@@ -118,7 +118,7 @@
 								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
 								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
 								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
-							</ul>
+							</ul> *@
 
 						</div>
 					</div>
@@ -482,3 +482,13 @@
 			<!-- /container -->
 		</div>
 		<!-- /Section -->
+<script src="~/CustomerContent/js/jquery.min.js"></script>
+
+<script type="text/javascript" src="/client/product.js"></script>
+<script>
+    $(document).ready(function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var productId = urlParams.get('id'); 
+		viewProduct(productId)
+    });
+</script>
