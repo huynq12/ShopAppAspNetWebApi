@@ -47,6 +47,8 @@ namespace ShopApp.Api.Controllers
 			var order = new Order()
 			{
 				User = user,
+				UserName = request.FullName,
+				PhoneNumber = request.PhoneNumber,
 				Address = request.Address,
 				OrderDate = DateTime.Now,
 				Status = OrderStatus.Processing
@@ -82,6 +84,10 @@ namespace ShopApp.Api.Controllers
 			var existingOrder = await _orderRepository.GetOrderById(request.OrderId);
 			if (existingOrder == null)
 				return NotFound();
+
+			if (existingOrder.Status == OrderStatus.Success || existingOrder.Status == OrderStatus.Cancel)
+				return BadRequest();
+
 			switch (request.Status)
 			{
 				case OrderStatus.Success:
@@ -98,7 +104,12 @@ namespace ShopApp.Api.Controllers
 				case OrderStatus.Cancel:
 					existingOrder.Status = OrderStatus.Cancel;
 					break;
+				default:
+					break;
 			}
+			existingOrder.UserName = request.UserName;
+			existingOrder.Address = request.Address;
+			existingOrder.PhoneNumber = request.PhoneNumber;
 			var updatedOrder = await _orderRepository.Update(existingOrder);
 			return Ok(updatedOrder);
 		}
