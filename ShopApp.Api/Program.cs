@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopApp.Api.Data;
 using ShopApp.Api.Interfaces;
 using ShopApp.Api.Repositories;
 using ShopApp.Models;
+using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,6 +58,9 @@ builder.Services.AddDbContext<DataContext>(option =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 
 
@@ -71,6 +77,33 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 }).AddRoles<IdentityRole>()
 	.AddEntityFrameworkStores<DataContext>()
 	.AddDefaultTokenProviders();
+
+// Adding Authentication
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+
+// Adding Jwt Bearer
+.AddJwtBearer(options =>
+{
+	options.SaveToken = true;
+	options.RequireHttpsMetadata = false;
+	options.TokenValidationParameters = new TokenValidationParameters()
+	{
+		ValidateIssuer = false,
+		ValidateAudience = false,
+		ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+		ValidAudience = builder.Configuration["JWT:ValidAudience"],
+		RequireExpirationTime = true,
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(
+			Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+	};
+});
+
 
 var app = builder.Build();
 

@@ -76,7 +76,7 @@ namespace ShopApp.Api.Controllers
         }
 
 		[HttpPost("/create-product")]
-		public async Task<JsonResult> Create([FromBody]AddProductRequest request)
+		public async Task<IActionResult> Create([FromBody]AddProductRequest request)
 		{
 			var product = new Product()
 			{
@@ -92,6 +92,10 @@ namespace ShopApp.Api.Controllers
                 Image = request.Image,
 				CreatedAt = DateTime.Now,
 			};
+            if(product.Price <= 0 || product.Quantity <= 0)
+            {
+                return BadRequest();
+            }
             if (request.CategoryIds != null && request.CategoryIds.Any())
             {
                 foreach (var categoryId in request.CategoryIds)
@@ -100,12 +104,11 @@ namespace ShopApp.Api.Controllers
                     {
                         CategoryId = categoryId,
                         ProductId = request.Id,
-
                     });
                 }
             }
-			await _productRepository.Create(product);
-			return new JsonResult("Saved");
+			var result = await _productRepository.Create(product);
+            return Ok(result);
         }
         [HttpPut("/edit-product")]
         public async Task<IActionResult> Update(AddProductRequest request)
