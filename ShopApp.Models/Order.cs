@@ -10,8 +10,10 @@ namespace ShopApp.Models
 	{
 		public int Id { get; set; }
 		public string User { get; set; }
+		public string Address { get; set; }
 		public DateTime OrderDate { get; set; }
 		public decimal TotalAmount { get; set; }
+		public List<OrderDetail> OrderDetails { get; set; }
 		
 	}
 }

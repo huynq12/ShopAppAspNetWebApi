@@ -520,7 +520,6 @@
 
 </script>
 <script>
-	var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 	function addToCart(productId, quantity) {
 			var existingItem = cartItems.find(item => item.productId === productId);
 
