@@ -5,71 +5,28 @@
 			<div class="container">
 				<!-- row -->
 				<div class="row">
+					<form id="orderForm">
 
 					<div class="col-md-7">
+
 						<!-- Billing Details -->
 						<div class="billing-details">
 							<div class="section-title">
 								<h3 class="title">Thông tin mua hàng</h3>
 							</div>
-							<form>
                                 <div class="form-group">
-								<input class="input" type="text" name="full-name" id="full-name" placeholder="Họ tên">
+								<input class="input" type="text" name="full-name" id="order-fullName" placeholder="Họ tên">
 							</div>
 							<div class="form-group">
-								<input class="input" type="email" name="email" placeholder="Email">
+								<input class="input" type="text" name="address" id="order-address" placeholder="Địa chỉ">
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="address" placeholder="Địa chỉ">
+								<input class="input" type="tel" name="tel" id="order-phoneNumber" placeholder="Số điện thoại">
 							</div>
-							<div class="form-group">
-								<input class="input" type="tel" name="tel" placeholder="Số điện thoại">
-							</div>
-                            </form>
 							
 						</div>
 						<!-- /Billing Details -->
 
-						<!-- Shiping Details -->
-						<div class="shiping-details">
-							<div class="section-title">
-								<h3 class="title">Địa chỉ giao hàng</h3>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="shiping-address">
-								<label for="shiping-address">
-									<span></span>
-									Vận chuyển đến địa điểm khác?
-								</label>
-								<div class="caption">
-									<div class="form-group">
-										<input class="input" type="text" name="first-name" placeholder="Tên">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="last-name" placeholder="Họ đệm">
-									</div>
-									<div class="form-group">
-										<input class="input" type="email" name="email" placeholder="Email">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="address" placeholder="Địa chỉ">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="city" placeholder="Thành phố">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="country" placeholder="Quốc gia">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="zip-code" placeholder="Mã bưu chính">
-									</div>
-									<div class="form-group">
-										<input class="input" type="tel" name="tel" placeholder="Số điện thoại">
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- /Shiping Details -->
 
 						<!-- Order notes -->
 						<div class="order-notes">
@@ -88,15 +45,15 @@
 								<div><strong>SẢN PHẨM</strong></div>
 								<div><strong>TỔNG CỘNG</strong></div>
 							</div>
-							<div class="order-products">
-								<div class="order-col">
+							<div class="order-products" id="order-products">
+								@* <div class="order-col">
 									<div>1x Product Name Goes Here</div>
 									<div>$980.00</div>
 								</div>
 								<div class="order-col">
 									<div>2x Product Name Goes Here</div>
 									<div>$980.00</div>
-								</div>
+								</div> *@
 							</div>
 							<div class="order-col">
 								<div>Vận chuyển</div>
@@ -104,7 +61,7 @@
 							</div>
 							<div class="order-col">
 								<div><strong>TỔNG CỘNG</strong></div>
-								<div><strong class="order-total">$2940.00</strong></div>
+								<div><strong class="order-total" id="totalAmount">$2940.00</strong></div>
 							</div>
 						</div>
 						<div class="payment-method">
@@ -146,12 +103,15 @@
 								Tôi đã đọc và chấp nhận các<a href="#">điều khoản và điều kiện</a>
 							</label>
 						</div>
-						<a href="#" class="primary-btn order-submit">Đặt hàng</a>
+						<button type="submit" class="primary-btn order-submit">Đặt hàng</button>
 					</div>
 					<!-- /Order Details -->
+					</form>
 				</div>
 				<!-- /row -->
 			</div>
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
+
+<script type="text/javascript" src="/client/order.js"></script>
