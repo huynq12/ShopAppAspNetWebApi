@@ -132,6 +132,10 @@ namespace ShopApp.Api.Controllers
             existingProduct.Power = request.Power;
             existingProduct.Screen = request.Screen;
             existingProduct.HardDrive = request.HardDrive;
+            if(existingProduct.Price <= 0 || existingProduct.Quantity < 0)
+            {
+                return BadRequest();
+            }
             await _categoryRepository.DeleteAllProductCategories(request.Id);
 
             List<ProductCategory> productCategories = new List<ProductCategory>();

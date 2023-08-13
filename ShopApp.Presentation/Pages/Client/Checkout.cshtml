@@ -1,4 +1,4 @@
-@page "/order"
+@page "/checkout"
 	<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
@@ -45,7 +45,10 @@
 								<div><strong>SẢN PHẨM</strong></div>
 								<div><strong>TỔNG CỘNG</strong></div>
 							</div>
-							<div class="order-products" id="order-products">
+							<div class="order-products">
+								<div id="order-productList">
+
+								</div>
 								@* <div class="order-col">
 									<div>1x Product Name Goes Here</div>
 									<div>$980.00</div>
@@ -61,7 +64,7 @@
 							</div>
 							<div class="order-col">
 								<div><strong>TỔNG CỘNG</strong></div>
-								<div><strong class="order-total" id="totalAmount">$2940.00</strong></div>
+								<div><strong class="order-total" id="totalAmount"></strong></div>
 							</div>
 						</div>
 						<div class="payment-method">

@@ -37,6 +37,11 @@ namespace ShopApp.Api.Repositories
 			return await _context.Orders.Include(x=>x.OrderDetails).ToListAsync();
 		}
 
+		public async Task<List<Order>> GetOrdersByUser(string user)
+		{
+			return await _context.Orders.Where(x=>x.User==user).ToListAsync();
+		}
+
 		public async Task<Order> Update(Order order)
 		{
 			_context.Orders.Update(order);

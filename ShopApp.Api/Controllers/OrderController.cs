@@ -97,6 +97,9 @@ namespace ShopApp.Api.Controllers
 						var product = await _productRepository.GetProductById(item.ProductId);
 						if (product == null)
 							return NotFound();
+
+						if (product.Quantity < item.Amount)
+							return BadRequest();
 						product.Quantity -= item.Amount;
 						await _productRepository.Update(product);
 					}
@@ -110,6 +113,7 @@ namespace ShopApp.Api.Controllers
 			existingOrder.UserName = request.UserName;
 			existingOrder.Address = request.Address;
 			existingOrder.PhoneNumber = request.PhoneNumber;
+
 			var updatedOrder = await _orderRepository.Update(existingOrder);
 			return Ok(updatedOrder);
 		}
@@ -120,14 +124,14 @@ namespace ShopApp.Api.Controllers
 			var order = await _orderRepository.GetOrderById(id);
 			if (order == null)
 				return NotFound();
-			foreach (var item in order.OrderDetails)
+			/*foreach (var item in order.OrderDetails)
 			{
 				var product = await _productRepository.GetProductById(item.ProductId);
 				if (product == null)
 					return NotFound();
 				product.Quantity += item.Amount;
 				await _productRepository.Update(product);
-			}
+			}*/
 			var deletedOrder = await _orderRepository.Delete(order);
 			
 			return Ok(deletedOrder);
