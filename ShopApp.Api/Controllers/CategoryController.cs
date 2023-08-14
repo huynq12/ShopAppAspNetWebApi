@@ -55,7 +55,20 @@ namespace ShopApp.Api.Controllers
                 Description = request.Description,
             });
             return Ok(result);
-        } 
+        }
+        [HttpPut("/update-category")]
+        public async Task<IActionResult> Update(CategoryDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var existingCategory = await _categoryRepository.GetCategoryById(request.Id);
+            if (existingCategory == null)
+                return NotFound();
+            existingCategory.Name=request.Name;
+            existingCategory.Description=request.Description;
+            await _categoryRepository.Update(existingCategory);
+            return Ok(existingCategory);
+        }
 
     }
 }
