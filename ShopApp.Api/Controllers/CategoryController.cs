@@ -56,6 +56,8 @@ namespace ShopApp.Api.Controllers
             });
             return Ok(result);
         }
+
+
         [HttpPut("/update-category")]
         public async Task<IActionResult> Update(CategoryDto request)
         {
@@ -70,5 +72,14 @@ namespace ShopApp.Api.Controllers
             return Ok(existingCategory);
         }
 
+        [HttpDelete("/delete-category/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var existingCategory = await _categoryRepository.GetCategoryById(id);
+            if (existingCategory == null)
+                return NotFound();
+            await _categoryRepository.Delete(existingCategory);
+            return Ok(existingCategory);
+        }
     }
 }

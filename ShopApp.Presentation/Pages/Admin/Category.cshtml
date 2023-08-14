@@ -60,6 +60,8 @@
       </div>
       <div class="modal-body">
         <form id="category-createForm">
+            <label>Id</label>
+            <input class="form-control" id="category-edit-id" disabled/>
             <label>Name</label>
             <input class="form-control" id="category-edit-name" />
             <label>Description</label>
@@ -68,7 +70,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="updateCategory()">Add</button>
+        <button type="button" class="btn btn-primary" onclick="updateCategory()">Save</button>
       </div>
     </div>
   </div>

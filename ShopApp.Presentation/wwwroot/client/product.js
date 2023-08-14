@@ -18,7 +18,7 @@ $(document).ready(function () {
         success: function (res) {
             for (let item of res.data.$values) {
                 var cardHtml = `
-                    <div class="col-md-4" >
+                    <div class="col-md-3" >
                         <a href="/product?id=${item.id}">
                         <div class="card mb-4" id="btnCard" data-product-id="${item.id}">
                             <input type="hidden" id="productDetailsId" value="${item.id}"/>

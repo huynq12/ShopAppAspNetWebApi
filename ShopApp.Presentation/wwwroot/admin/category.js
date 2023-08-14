@@ -27,7 +27,7 @@ function displayCategories(){
                         <td>${item.id}</td>
                         <td>${item.name}</td>
                         <td>${item.description}</td>
-                        <td><a class="btn btn-warning" onclick=editCategory(${item.id})>Edit</a></td>
+                        <td><a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#category-edit" onclick=getCategory(${item.id})>Edit</a> | <a class="btn btn-danger" onclick=deleteCategory(${item.id})>Delete</a></td>
                     </tr>
                 `
             } 
@@ -53,9 +53,52 @@ function addNewCategory(){
         }
     })
 }
-function editCategory(id){
-
+function getCategory(id){
+    $.ajax({
+        url:baseUrl+'/category/'+id,
+        type:'GET',
+        success:function(res){
+            $('#category-edit-id').val(res.id)
+            $('#category-edit-name').val(res.name)
+            $('#category-edit-description').val(res.description)
+        }
+    })
 }
 function updateCategory(){
-    edit
+    categoryData = {
+        id: $('#category-edit-id').val(),
+        name : $('#category-edit-name').val(),
+        description : $('#category-edit-description').val()
+    }
+    $.ajax({
+        url:baseUrl + '/update-category',
+        type:'PUT',
+        contentType:'application/json',
+        data:JSON.stringify(categoryData),
+        success:function(){
+            //alert('update successfully')
+            $('#category-edit').modal('hide')
+            displayCategories()
+        },
+        error:function(error){
+            console.log(JSON.stringify(error))
+        }
+    })
+}
+
+function deleteCategory(id){
+    if(confirm("Do you want to delete this category?")){
+        $.ajax({
+            url : baseUrl + '/delete-category/' + id,
+            type:'DELETE',
+            dataType:'json',
+            success:function(){
+                displayCategories()
+                alert('Delete successfully')
+            },
+            error:function(error){
+                console.log(JSON.stringify(error))
+            }
+        })
+    }
 }
