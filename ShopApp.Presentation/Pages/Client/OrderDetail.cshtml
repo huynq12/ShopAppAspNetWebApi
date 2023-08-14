@@ -1,0 +1,42 @@
+@page "/order-detail"
+
+<div class="container">
+    <h3>Order detail</h3>
+    <form id="order-edit-form">
+        <label>OrderId</label>
+        <input class="form-control" id="order-orderId" disabled />
+        <label>Full name</label>
+        <input class="form-control" id="order-fullName"/>
+        <label>Phone number</label>
+        <input class="form-control" id="order-phoneNumber"/>
+        <label>Address</label>
+        <input class="form-control" id="order-address"/>
+        <label>Date</label>
+        <input class="form-control" id="order-date"/>
+        <label>Status</label>
+        <input class="form-control" id="order-status"/>
+        <table class="table table-bordered table-striped dt-responsive nowrap mt-3">
+            <thead>
+                <th>#</th>
+                <th>Product</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </thead>
+            <tbody id="orderDetail">
+
+            </tbody>
+        </table>
+        <label>GrandTotal</label>
+        <input class="form-control" id="order-totalAmount"/>
+        <div>
+            <a href="/user" class="btn btn-warning form-group mt-3">Back</a>
+
+            <button type="submit" class="btn btn-info form-group mt-3">Save</button>
+
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/client/orderDetail.js"></script>

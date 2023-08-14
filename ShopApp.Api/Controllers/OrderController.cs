@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using ShopApp.Api.Interfaces;
 using ShopApp.Api.Migrations;
 using ShopApp.Models;
@@ -12,17 +14,17 @@ namespace ShopApp.Api.Controllers
 	public class OrderController : ControllerBase
 	{
 		private readonly IOrderRepository _orderRepository;
-		
+		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IProductRepository _productRepository;
 
 		public OrderController(IOrderRepository orderRepository,
-			
+			UserManager<ApplicationUser> userManager,
 			IHttpContextAccessor httpContextAccessor,
 			IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
-		
+			_userManager = userManager;
 			_httpContextAccessor = httpContextAccessor;
 			_productRepository = productRepository;
         }
@@ -33,6 +35,31 @@ namespace ShopApp.Api.Controllers
 			var list = await _orderRepository.GetOrders();
 			return Ok(list);
 		}
+		[HttpGet("/order/{id}")]
+		public async Task<IActionResult> GetOrder(int id)
+		{
+			var order = await _orderRepository.GetOrderById(id);
+			if (order == null)
+				return NotFound();
+			return Ok(order);
+		}
+		[HttpGet("/user-orders")]
+		public async Task<IActionResult> GetOrdersByUser()
+		{
+			var user = _httpContextAccessor.HttpContext.User.Identity.Name;
+			if (user == null)
+				return BadRequest();
+			var listOrders = await _orderRepository.GetOrdersByUser(user);
+			return Ok(listOrders);
+		}
+
+		[HttpGet("/orders-by")]
+		public async Task<IActionResult> GetOrdersByUser(string userEmail)
+		{
+			var listOrders = await _orderRepository.GetOrdersByUser(userEmail);
+			return Ok(listOrders);
+		}
+		
 
 		[HttpPost("/place-order")]
 		public async Task<IActionResult> PlaceOrder(PlaceOrderRequest request)
@@ -68,6 +95,7 @@ namespace ShopApp.Api.Controllers
 					{
 						OrderId = order.Id,
 						ProductId = cartItem.ProductId,
+						ProductName = product.Name,
 						Amount = cartItem.Quantity,
 						Price = product.Price
 					});
@@ -84,6 +112,10 @@ namespace ShopApp.Api.Controllers
 			var existingOrder = await _orderRepository.GetOrderById(request.OrderId);
 			if (existingOrder == null)
 				return NotFound();
+
+			var user = _httpContextAccessor.HttpContext.User.Identity.Name;
+			if (user == null || user != existingOrder.User)
+				return BadRequest();
 
 			if (existingOrder.Status == OrderStatus.Success || existingOrder.Status == OrderStatus.Cancel)
 				return BadRequest();
@@ -108,11 +140,12 @@ namespace ShopApp.Api.Controllers
 					existingOrder.Status = OrderStatus.Cancel;
 					break;
 				default:
+					existingOrder.UserName = request.UserName;
+					existingOrder.Address = request.Address;
+					existingOrder.PhoneNumber = request.PhoneNumber;
 					break;
 			}
-			existingOrder.UserName = request.UserName;
-			existingOrder.Address = request.Address;
-			existingOrder.PhoneNumber = request.PhoneNumber;
+			
 
 			var updatedOrder = await _orderRepository.Update(existingOrder);
 			return Ok(updatedOrder);

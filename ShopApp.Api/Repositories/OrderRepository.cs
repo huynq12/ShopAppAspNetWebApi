@@ -32,6 +32,11 @@ namespace ShopApp.Api.Repositories
 			return await _context.Orders.Include(x=>x.OrderDetails).FirstOrDefaultAsync(x => x.Id == id);
 		}
 
+		public Task<OrderDetail> GetOrderDetailById(int id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public async Task<List<Order>> GetOrders()
 		{
 			return await _context.Orders.Include(x=>x.OrderDetails).ToListAsync();
