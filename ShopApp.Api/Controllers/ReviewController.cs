@@ -12,12 +12,15 @@ namespace ShopApp.Api.Controllers
 	{
 		private readonly IReviewRepository _reviewRepository;
 		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IOrderRepository _orderRepository;
 
 		public ReviewController(IReviewRepository reviewRepository,
-			IHttpContextAccessor httpContextAccessor)
+			IHttpContextAccessor httpContextAccessor,
+			IOrderRepository orderRepository)
         {
             _reviewRepository = reviewRepository;
 			_httpContextAccessor = httpContextAccessor;
+			_orderRepository = orderRepository;
         }
 
 		[HttpGet("/product/reviews/{orderDetailId}")]
@@ -26,7 +29,7 @@ namespace ShopApp.Api.Controllers
 			return Ok(list);
 		}
 
-		[HttpPost("/product/place-review")]
+		[HttpPost("/place-review")]
 		public async Task<IActionResult> PlaceReview([FromBody] AddReviewRequest request)
 		{
 			if (!ModelState.IsValid)
@@ -36,7 +39,13 @@ namespace ShopApp.Api.Controllers
 			if (user == null)
 				return BadRequest();
 
+			var orderDetail = await _orderRepository.GetOrderDetailById(request.OrderDetailId);
+			if (orderDetail == null)
+				return BadRequest();
 
+			var order = await _orderRepository.GetOrderById(orderDetail.OrderId);
+			if (order == null || order.Status == OrderStatus.Cancel || order.Status == OrderStatus.Processing || order.User != user)
+				return BadRequest();
 
 			if (await _reviewRepository.HasReviewed(user, request.OrderDetailId))
 			{

@@ -85,6 +85,7 @@ $('#orderForm').submit(function (e) {
             for (var i = cartItems.length - 1; i >= 0; i--) {
                     cartItems.splice(i, 1);
             }
+            window.location = '/user'
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
             
         },
