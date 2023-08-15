@@ -80,19 +80,22 @@ namespace ShopApp.Api.Controllers
                 CategoryIds = listCategoryIds.ToArray()
             });
         }
-        [NonAction]
-        private string GetFilepath()
-        {
-            return _hostingEnvironment.WebRootPath + "\\images\\product\\";
-        }
-        [NonAction]
-        private string GetImagePath(int productId)
+        [HttpGet("/getImagePath")]
+        public string GetImagePath(int productId)
         {
             return _hostingEnvironment.WebRootPath + "\\images\\product\\laptop"+productId+".png";
         }
         [HttpPut("/upload-image")]
-        public async Task<IActionResult> UploadImage(IFormFile formFile, int productId)
+        public async Task<IActionResult> UploadImage(IFormCollection data)
         {
+            var productId = 0;
+            var isProductId = int.TryParse(data["productId"],out productId);
+            if(!isProductId )
+                return BadRequest();
+            var file = data.Files[0];
+            var product = await _productRepository.GetProductById(productId);
+            if (product == null)
+                return BadRequest();
             string response = string.Empty;
             try
             {
@@ -103,10 +106,12 @@ namespace ShopApp.Api.Controllers
                 }
                 using (FileStream stream = System.IO.File.Create(imagepath))
                 {
-                    await formFile.CopyToAsync(stream);
+                    await file.CopyToAsync(stream);
               
                     response = "pass";
                 }
+                //product.Image = "/images/product/laptop"+productId+".png";
+                await _productRepository.Update(product);
             }
             catch (Exception ex)
             {
@@ -155,7 +160,7 @@ namespace ShopApp.Api.Controllers
 				Screen = request.Screen,
 				CPU = request.CPU,
 				Power = request.Power,
-                Image = request.Image,
+                //Image = request.Image,
 				CreatedAt = DateTime.Now,
 			};
             if(product.Price <= 0 || product.Quantity <= 0)

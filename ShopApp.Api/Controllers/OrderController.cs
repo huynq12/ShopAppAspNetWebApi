@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using ShopApp.Api.Interfaces;
-using ShopApp.Api.Migrations;
 using ShopApp.Models;
 using ShopApp.Models.DTOs;
 

@@ -61,6 +61,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();	
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 

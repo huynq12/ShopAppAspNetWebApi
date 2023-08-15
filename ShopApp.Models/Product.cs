@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace ShopApp.Models
 		public string RAM { get; set; }
 		public string HardDrive { get; set; }
 		public string Power { get; set; }
-		public string? Image { get; set; }
+		public Image Image { get; set; }
 		public DateTime CreatedAt { get; set; }
 		public List<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 		public List<Review> Reviews { get; set; } = new List<Review>();

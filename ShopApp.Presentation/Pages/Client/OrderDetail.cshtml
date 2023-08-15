@@ -1,5 +1,10 @@
 @page "/order-detail"
 
+@{
+    Layout = null;
+}
+<link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
+
 <div class="container">
     <h3>Order detail</h3>
     <form id="order-edit-form">
@@ -39,6 +44,41 @@
 
         </div>
     </form>
+
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Review</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="reviewForm">
+            <label>Id</label>
+            <input class="form-control" id="review-id" disabled/>
+            <label>Full name</label>
+            <input class="form-control" id="review-userName">
+            <select id="review-rating" class="form-select  js-choice mt-2">
+                            <option value="5" selected="">★★★★★ (5/5)</option>
+                            <option value="4">★★★★☆ (4/5)</option>
+                            <option value="3">★★★☆☆ (3/5)</option>
+                            <option value="2">★★☆☆☆ (2/5)</option>
+                            <option value="1">★☆☆☆☆ (1/5)</option>
+                        </select>
+            <textarea class="form-control mt-2" id="review-commentMsg" placeholder="Write your comment" rows="3"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitReview()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="/client/orderDetail.js"></script>

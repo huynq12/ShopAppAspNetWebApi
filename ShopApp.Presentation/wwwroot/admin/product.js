@@ -13,6 +13,9 @@ $(document).ready(function () {
     });
     listProduct()
     getCategoryOptions()
+    let a = ''
+    a = getImage(9)
+    console.log(a)
 })
 function listProduct(){
     var empData = []
@@ -20,13 +23,14 @@ function listProduct(){
         url: baseUrl + '/products',
         type: 'GET',
         success: function (res) {
-            console.log(res)
+            //console.log(res)
             for (let item of res.data.$values) {
                 empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description,image:item.image })
             }
-            console.log(empData)
+            //console.log(empData)
             $('#listProduct').DataTable({
                 data: empData,
+                retrieve: true,
                 columnDefs: [{
                     targets: 0,
                     data: 'id',
@@ -60,11 +64,13 @@ function listProduct(){
                     name:'Image',
                     render: function(data,type,row){
                         if(row.image == null){
-                            $('#upload-id').val(row.id)
-                            return '<a href="#" class="btn btn-info" data-uploadId="'+row.id+'" data-bs-toggle="modal" data-bs-target="#uploadImage">Upload</a>'
+                            //$('#upload-id').val(row.id)
+                            return '<a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#uploadImage" onclick=getProductId('+row.id+')>Upload</a>'
                         }
                         else{
-                            return `<img src="${baseUrl}/images/product/laptop${row.id}">`
+                            var imgStr = `<img id="productImage">`
+                            getImage(row.id)
+                            return imgStr
                         }
                     }
                 }
@@ -83,25 +89,43 @@ function listProduct(){
         }
     })
 }
+function getProductId(id){
+    $('#upload-id').val(id)
+}
+
+function getImage(id){
+    var productId = id
+    $.ajax({
+        url: baseUrl + '/image',
+        type:'GET',
+        data:productId,
+        success:function(response){
+            var srcStr = baseUrl +response
+            $('#productImage').attr('src',srcStr );
+        }
+    })
+}
 
 function uploadImage(){
-    var uploadData = {
-        formFile : $('#upload-image')[0].files[0],
-        productId : $('#upload-id').val()
-    }
-    console.log(uploadData.productId)
+    var productId = $('#upload-id').val()
+    var formFile = $('#upload-image')[0].files[0];
+    
+    var formData = new FormData();
+    formData.append('productId', productId);
+    formData.append('formFile', formFile);
+
     $.ajax({
         url:baseUrl + '/upload-image',
         type:'PUT',
-        contentType:'application/json',
-        data:JSON.stringify(uploadData),
+        contentType:false,
+        processData:false,
+        data:formData,
         success:function(){
             $('#uploadImage').modal('hide')
             listProduct()
             console.log('thanh cong')
         }
     })
-
 }
 
 function addNewProduct() {

@@ -267,6 +267,33 @@ namespace ShopApp.Api.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("ShopApp.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("ShopApp.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -357,9 +384,6 @@ namespace ShopApp.Api.Migrations
 
                     b.Property<string>("HardDrive")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -513,6 +537,15 @@ namespace ShopApp.Api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ShopApp.Models.Image", b =>
+                {
+                    b.HasOne("ShopApp.Models.Product", null)
+                        .WithOne("Image")
+                        .HasForeignKey("ShopApp.Models.Image", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ShopApp.Models.OrderDetail", b =>
                 {
                     b.HasOne("ShopApp.Models.Order", null)
@@ -568,6 +601,9 @@ namespace ShopApp.Api.Migrations
 
             modelBuilder.Entity("ShopApp.Models.Product", b =>
                 {
+                    b.Navigation("Image")
+                        .IsRequired();
+
                     b.Navigation("ProductCategories");
 
                     b.Navigation("Reviews");

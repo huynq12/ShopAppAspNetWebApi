@@ -3,11 +3,9 @@ const baseUrl = 'https://localhost:7000'
 $(document).ready(function () {
     $.ajaxSetup({
         beforeSend: function (xhr) {
-            // Get token from localStorage
             var token = localStorage.getItem('token');
 
             if (token) {
-                // Attach token to the Authorization header
                 xhr.setRequestHeader('Authorization', 'Bearer ' + token);
             }
         }
