@@ -49,6 +49,7 @@ function viewOrder(orderId){
                     </form>
                 `
                 $('#reviewProduct').append(reviewHtml)
+                
             }
             $('#orderDetail').html(orderDetailHtml)  
             if(res.status === 'Processing'){
@@ -99,13 +100,17 @@ function reviewFormAction(orderDetailId){
                             <option value="1">★☆☆☆☆ (1/5)</option>
                         </select>
                         <textarea class="form-control mt-2" id="commentMsg" placeholder="Write your comment" rows="3"></textarea>
-                        <button type="submit" id="btnComment" class="btn btn-success mt-2">Submit</button>
+                        <button type="submit" class="btn btn-success mt-2">Submit</button>
                 `
                 $('#reviewForm').append(formReview)
 }
+let a = document.querySelector('#reviewForm')
+console.log(a)
 
-$('#btnComment').click(function(e){
+
+$('#reviewForm').submit(function(e){
     e.preventDefault();
+    debugger;
     var reviewData = {
         userName : $('#review-fullName').val(),
         orderDetailId : $('#orderDetailId').val(),
@@ -116,13 +121,14 @@ $('#btnComment').click(function(e){
     $.ajax({
         url:baseUrl + '/place-review',
         type:'POST',
-        dataType: 'json',
+        //dataType: 'json',
         contentType: "application/JSON",
         data: JSON.stringify(reviewData),
         success:function(){
             alert('review ok')
             $('#commentMsg').val('')
             $('#review-rating').val('')
+            viewOrder(orderId)
         },
         error:function(e){
             alert(JSON.stringify(e))

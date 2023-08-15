@@ -6,6 +6,8 @@ using ShopApp.Api.Interfaces;
 using ShopApp.Models;
 using ShopApp.Models.DTOs;
 using System.Net.WebSockets;
+using System.IO;
+
 
 namespace ShopApp.Api.Controllers
 {
@@ -15,12 +17,15 @@ namespace ShopApp.Api.Controllers
 	{
 		private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         public ProductController(IProductRepository productRepository,
-			ICategoryRepository categoryRepository)
+			ICategoryRepository categoryRepository,
+            IWebHostEnvironment hostingEnvironment)
         {
             _productRepository = productRepository;
 			_categoryRepository = categoryRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 		[HttpGet("/products")]
 		public async Task<IActionResult> GetProducts()
@@ -31,6 +36,7 @@ namespace ShopApp.Api.Controllers
 				Id = x.Id,
 				Name = x.Name,
 				Quantity = x.Quantity,
+                SoldQuantity = x.SoldQuantity,
 				Price = x.Price.ToString(),
 				Description = x.Description,
 			});
@@ -74,14 +80,74 @@ namespace ShopApp.Api.Controllers
                 CategoryIds = listCategoryIds.ToArray()
             });
         }
+        [NonAction]
+        private string GetFilepath()
+        {
+            return _hostingEnvironment.WebRootPath + "\\images\\product\\";
+        }
+        [NonAction]
+        private string GetImagePath(int productId)
+        {
+            return _hostingEnvironment.WebRootPath + "\\images\\product\\laptop"+productId+".png";
+        }
+        [HttpPut("/upload-image")]
+        public async Task<IActionResult> UploadImage(IFormFile formFile, int productId)
+        {
+            string response = string.Empty;
+            try
+            {
+                string imagepath = GetImagePath(productId);
+                if (System.IO.File.Exists(imagepath))
+                {
+                    System.IO.File.Delete(imagepath);
+                }
+                using (FileStream stream = System.IO.File.Create(imagepath))
+                {
+                    await formFile.CopyToAsync(stream);
+              
+                    response = "pass";
+                }
+            }
+            catch (Exception ex)
+            {
+                response = ex.Message;
+            }
+            return Ok(response);
+        }
+        [HttpGet("/image")]
+        public async Task<IActionResult> GetImage(int productId)
+        {
+            string Imageurl = string.Empty;
+            string hosturl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+            try
+            {
 
-		[HttpPost("/create-product")]
+                string imagepath = GetImagePath(productId);
+                if (System.IO.File.Exists(imagepath))
+                {
+                    Imageurl = hosturl + "/images/product/" +  "laptop" + productId + ".png";
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return Ok(Imageurl);
+
+        }
+
+        [HttpPost("/create-product")]
 		public async Task<IActionResult> Create([FromBody]AddProductRequest request)
 		{
-			var product = new Product()
+            
+            var product = new Product()
 			{
 				Name = request.Name,
 				Quantity = request.Quantity,
+                SoldQuantity = 0,
 				Price = request.Price,
 				Description = request.Description,
 				RAM = request.RAM,
@@ -159,7 +225,7 @@ namespace ShopApp.Api.Controllers
         }
 
         [HttpDelete("/delete-product/{id}")]
-        public async Task<IActionResult> DeletePost(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var product = await _productRepository.GetProductById(id);
             if (product == null)

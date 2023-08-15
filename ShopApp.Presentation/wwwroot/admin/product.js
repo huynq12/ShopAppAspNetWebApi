@@ -11,6 +11,10 @@ $(document).ready(function () {
             }
         }
     });
+    listProduct()
+    getCategoryOptions()
+})
+function listProduct(){
     var empData = []
     $.ajax({
         url: baseUrl + '/products',
@@ -18,7 +22,7 @@ $(document).ready(function () {
         success: function (res) {
             console.log(res)
             for (let item of res.data.$values) {
-                empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description })
+                empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description,image:item.image })
             }
             console.log(empData)
             $('#listProduct').DataTable({
@@ -52,7 +56,21 @@ $(document).ready(function () {
                     name: 'Description',
                 },
                 {
-                    targets: 5,
+                    targets : 5,
+                    name:'Image',
+                    render: function(data,type,row){
+                        if(row.image == null){
+                            $('#upload-id').val(row.id)
+                            return '<a href="#" class="btn btn-info" data-uploadId="'+row.id+'" data-bs-toggle="modal" data-bs-target="#uploadImage">Upload</a>'
+                        }
+                        else{
+                            return `<img src="${baseUrl}/images/product/laptop${row.id}">`
+                        }
+                    }
+                }
+                ,
+                {
+                    targets: 6,
                     name: 'Actions',
                     render: function (data, type, row) {
                         return '<a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#product-edit" onclick=editProduct("' + row.id + '");>Edit</a> | <a href="#" class="btn btn-danger" onclick=deleteProduct("' + row.id + '");>Delete</a>'
@@ -64,12 +82,27 @@ $(document).ready(function () {
             })
         }
     })
-    getCategoryOptions()
-})
+}
 
-// $('#btnCreateProduct').click(function(){
-//     $('#product-create').modal('show')
-// })
+function uploadImage(){
+    var uploadData = {
+        formFile : $('#upload-image')[0].files[0],
+        productId : $('#upload-id').val()
+    }
+    console.log(uploadData.productId)
+    $.ajax({
+        url:baseUrl + '/upload-image',
+        type:'PUT',
+        contentType:'application/json',
+        data:JSON.stringify(uploadData),
+        success:function(){
+            $('#uploadImage').modal('hide')
+            listProduct()
+            console.log('thanh cong')
+        }
+    })
+
+}
 
 function addNewProduct() {
     const objData = {
@@ -82,11 +115,9 @@ function addNewProduct() {
         hardDrive: $('#product-create-hardDrive').val(),
         screen: $('#product-create-screen').val(),
         power: $('#product-create-power').val(),
-        image: $('#product-create-image').val(),
+        //image :'null',
         categoryIds:$('#product-create-categories').val()
     }
-    console.log(objData)
-    console.log(objData.tagIds)
     setTimeout(500)
     $.ajax({
         url: baseUrl + '/create-product',
@@ -145,7 +176,6 @@ function getProductById(id){
             $("#product-edit-hardDrive").val(data.hardDrive)
             $("#product-edit-screen").val(data.screen)
             $("#product-edit-power").val(data.power)
-            $("#product-edit-image").val(data.image)
             $("#product-edit-categories").val(data.categoryIds)
         } else {
             console.error('data error');
@@ -195,7 +225,6 @@ function updateProduct(){
         hardDrive: $('#product-edit-hardDrive').val(),
         screen: $('#product-edit-screen').val(),
         power: $('#product-edit-power').val(),
-        image: $('#product-edit-image').val(),
         categoryIds:$('#product-edit-categories').val()
     }
     console.log(data.id)

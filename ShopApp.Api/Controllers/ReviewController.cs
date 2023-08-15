@@ -23,7 +23,7 @@ namespace ShopApp.Api.Controllers
 			_orderRepository = orderRepository;
         }
 
-		[HttpGet("/product/reviews/{orderDetailId}")]
+		[HttpGet("/reviews/{orderDetailId}")]
 		public async Task<IActionResult> GetReviews(int orderDetailId) {
 			var list = await _reviewRepository.GetReviews(orderDetailId);
 			return Ok(list);

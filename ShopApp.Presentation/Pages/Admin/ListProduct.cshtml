@@ -18,6 +18,7 @@
             <th>Quantity</th>
             <th>Price</th>
             <th>Description</th>
+            <th>Image</th>
             <th>Actions</th>
         </thead>
         <tbody>
@@ -36,7 +37,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form enctype="multipart/form-data">
                     <label>Name</label>
                     <input class="form-control" id="product-create-name" />
                     <label>Quantity</label>
@@ -54,9 +55,7 @@
                     <label>Screen</label>
                     <input class="form-control" id="product-create-screen" />
                     <label>Power</label>
-                    <input class="form-control" id="product-create-power" />
-                    <label>Image</label>
-                    <input class="form-control" id="product-create-image" />
+                    <input class="form-control" id="product-create-power" />  
                     <label>Categories</label>
                     <select class="product-categories" id="product-create-categories" name="product-create-categories[]" multiple>
                     </select>
@@ -79,7 +78,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form enctype="multipart/form-data">
                     <label>Id</label>
                     <input class="form-control" id="product-edit-id" disabled />
                     <label>Name</label>
@@ -101,7 +100,7 @@
                     <label>Power</label>
                     <input class="form-control" id="product-edit-power" />
                     <label>Image</label>
-                    <input class="form-control" id="product-edit-image" />
+                    <input type="file" class="form-control" id="product-edit-image" accept="image/*">
                     <label>Categories</label>
                     <select class="product-edit-categories" id="product-edit-categories" name="product-edit-categories[]" multiple>
                     </select>
@@ -113,6 +112,28 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="uploadImage" tabindex="-1" aria-labelledby="uploadImageLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="uploadImageLabel">Upload image</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm">
+            <input class="form-control" id="upload-id" disabled>
+            <input type="file" class="form-control" id="upload-image" accept="image/*">
+            @* <button type="submit" class="btn btn-success">Submit</button> *@
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="uploadImage()">Submit</button>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>

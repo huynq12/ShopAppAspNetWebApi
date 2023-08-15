@@ -133,6 +133,7 @@ namespace ShopApp.Api.Controllers
 						if (product.Quantity < item.Amount)
 							return BadRequest();
 						product.Quantity -= item.Amount;
+						product.SoldQuantity += item.Amount;
 						await _productRepository.Update(product);
 					}
 					break;

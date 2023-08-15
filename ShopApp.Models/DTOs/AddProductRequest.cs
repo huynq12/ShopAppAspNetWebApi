@@ -19,7 +19,7 @@ namespace ShopApp.Models.DTOs
         public string RAM { get; set; }
         public string HardDrive { get; set; }
         public string Power { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public int[] CategoryIds { get; set; }
     }
 }
