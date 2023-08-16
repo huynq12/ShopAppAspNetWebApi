@@ -48,6 +48,8 @@ function addNewCategory(){
         contentType : 'application/json',
         data:JSON.stringify(categoryData),
         success:function(){
+            $('#category-create-name').html('')
+            $('#category-create-description').html('')
             $('#category-create').modal('hide')
             displayCategories()
         }

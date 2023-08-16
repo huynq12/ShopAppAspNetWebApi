@@ -20,9 +20,9 @@ namespace ShopApp.Models
 		public string RAM { get; set; }
 		public string HardDrive { get; set; }
 		public string Power { get; set; }
-		public Image Image { get; set; }
 		public DateTime CreatedAt { get; set; }
 		public List<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 		public List<Review> Reviews { get; set; } = new List<Review>();
+		public List<Image> Images { get; set; } = new List<Image>();
 	}
 }

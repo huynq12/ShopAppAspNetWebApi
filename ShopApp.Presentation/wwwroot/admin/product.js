@@ -13,9 +13,6 @@ $(document).ready(function () {
     });
     listProduct()
     getCategoryOptions()
-    let a = ''
-    a = getImage(9)
-    console.log(a)
 })
 function listProduct(){
     var empData = []
@@ -23,9 +20,10 @@ function listProduct(){
         url: baseUrl + '/products',
         type: 'GET',
         success: function (res) {
-            //console.log(res)
+
+            console.log(res.data.$values)
             for (let item of res.data.$values) {
-                empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description,image:item.image })
+                empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description,imageUrl:item.imageUrl })
             }
             //console.log(empData)
             $('#listProduct').DataTable({
@@ -61,18 +59,18 @@ function listProduct(){
                 },
                 {
                     targets : 5,
+                    //data:'imageUrl',
                     name:'Image',
-                    render: function(data,type,row){
-                        if(row.image == null){
-                            //$('#upload-id').val(row.id)
-                            return '<a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#uploadImage" onclick=getProductId('+row.id+')>Upload</a>'
+                    render: function(data, type, row) {
+                        if (type === 'display') {
+                            return '<img src="' + row.imageUrl + '" alt="Product Image" width="100">';
                         }
-                        else{
-                            var imgStr = `<img id="productImage">`
-                            getImage(row.id)
-                            return imgStr
-                        }
-                    }
+                        return data; 
+                    },
+                    orderable:false
+
+                    //return '<a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#uploadImage" onclick=getProductId('+row.id+')>Upload</a>'
+                    
                 }
                 ,
                 {
@@ -93,30 +91,37 @@ function getProductId(id){
     $('#upload-id').val(id)
 }
 
-function getImage(id){
-    var productId = id
-    $.ajax({
-        url: baseUrl + '/image',
-        type:'GET',
-        data:productId,
-        success:function(response){
-            var srcStr = baseUrl +response
-            $('#productImage').attr('src',srcStr );
-        }
-    })
-}
+// function getImage(productId){
+//     var imageUrls = []
+//     $.ajax({
+//         url: baseUrl + '/image/'+productId,
+//         type:'GET',
+//         success:function(response){
+//             for(let item of response.$values){
+//                 imageUrls.push(item)
+//             }
+//             console.log(imageUrls)
+//         }
+//     })
+
+
+// }
+
 
 function uploadImage(){
+    
     var productId = $('#upload-id').val()
-    var formFile = $('#upload-image')[0].files[0];
+    var formFile = $('#upload-image')[0].files;
     
     var formData = new FormData();
     formData.append('productId', productId);
-    formData.append('formFile', formFile);
+    for (var i = 0; i < formFile.length; i++) {
+        formData.append('files', formFile[i]);
+    }
 
     $.ajax({
         url:baseUrl + '/upload-image',
-        type:'PUT',
+        type:'POST',
         contentType:false,
         processData:false,
         data:formData,

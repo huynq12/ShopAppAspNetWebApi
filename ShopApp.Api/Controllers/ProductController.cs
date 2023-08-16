@@ -18,19 +18,24 @@ namespace ShopApp.Api.Controllers
 		private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IImageRepository _imageRepository;
 
         public ProductController(IProductRepository productRepository,
 			ICategoryRepository categoryRepository,
-            IWebHostEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment,
+            IImageRepository imageRepository)
         {
             _productRepository = productRepository;
 			_categoryRepository = categoryRepository;
             _hostingEnvironment = hostingEnvironment;
+            _imageRepository = imageRepository;
         }
 		[HttpGet("/products")]
 		public async Task<IActionResult> GetProducts()
 		{
 			var list = await _productRepository.GetAllProducts();
+            var productIds = list.Select(x=>x.Id).ToArray();
+            var images = await _imageRepository.GetImageByProductIds(productIds);
 			var listDto = list.Select(x => new ProductDto
 			{
 				Id = x.Id,
@@ -39,6 +44,7 @@ namespace ShopApp.Api.Controllers
                 SoldQuantity = x.SoldQuantity,
 				Price = x.Price.ToString(),
 				Description = x.Description,
+                ImageUrl = images.FirstOrDefault(c=>c.ProductId==x.Id) == null ? "" : $"https://localhost:7000/images/product/{x.Id}/{images.FirstOrDefault(c => c.ProductId == x.Id).ImageName}",
 			});
 			var recordsTotal = list.Count();
 			var data = new { data = listDto, recordsTotal };
@@ -79,69 +85,6 @@ namespace ShopApp.Api.Controllers
 				Power = product.Power,
                 CategoryIds = listCategoryIds.ToArray()
             });
-        }
-        [HttpGet("/getImagePath")]
-        public string GetImagePath(int productId)
-        {
-            return _hostingEnvironment.WebRootPath + "\\images\\product\\laptop"+productId+".png";
-        }
-        [HttpPut("/upload-image")]
-        public async Task<IActionResult> UploadImage(IFormCollection data)
-        {
-            var productId = 0;
-            var isProductId = int.TryParse(data["productId"],out productId);
-            if(!isProductId )
-                return BadRequest();
-            var file = data.Files[0];
-            var product = await _productRepository.GetProductById(productId);
-            if (product == null)
-                return BadRequest();
-            string response = string.Empty;
-            try
-            {
-                string imagepath = GetImagePath(productId);
-                if (System.IO.File.Exists(imagepath))
-                {
-                    System.IO.File.Delete(imagepath);
-                }
-                using (FileStream stream = System.IO.File.Create(imagepath))
-                {
-                    await file.CopyToAsync(stream);
-              
-                    response = "pass";
-                }
-                //product.Image = "/images/product/laptop"+productId+".png";
-                await _productRepository.Update(product);
-            }
-            catch (Exception ex)
-            {
-                response = ex.Message;
-            }
-            return Ok(response);
-        }
-        [HttpGet("/image")]
-        public async Task<IActionResult> GetImage(int productId)
-        {
-            string Imageurl = string.Empty;
-            string hosturl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-            try
-            {
-
-                string imagepath = GetImagePath(productId);
-                if (System.IO.File.Exists(imagepath))
-                {
-                    Imageurl = hosturl + "/images/product/" +  "laptop" + productId + ".png";
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-            return Ok(Imageurl);
-
         }
 
         [HttpPost("/create-product")]

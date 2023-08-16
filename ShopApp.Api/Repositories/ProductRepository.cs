@@ -31,7 +31,7 @@ namespace ShopApp.Api.Repositories
 
 		public async Task<List<Product>> GetAllProducts()
 		{
-			return await _context.Products.ToListAsync();
+			return await _context.Products.Include(x=>x.Images).ToListAsync();
 		}
 
 		public async Task<Product> GetProductById(int id)

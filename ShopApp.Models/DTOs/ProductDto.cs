@@ -14,5 +14,7 @@ namespace ShopApp.Models.DTOs
         public int SoldQuantity { get; set; }
         public string Price { get; set; }
         public string Description { get; set; }
+        public string ImageUrl { get; set; }
+        //public List<string> ImageNames { get; set; } = new List<string>();
     }
 }
