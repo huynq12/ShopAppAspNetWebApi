@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShopApp.Models.DTOs
 {
-	public class UpdateOrderRequest
+    public class UpdateOrderRequest
 	{
 		public int OrderId { get; set; }
 		public string? UserName { get; set; }

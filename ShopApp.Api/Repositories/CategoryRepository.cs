@@ -41,14 +41,12 @@ namespace ShopApp.Api.Repositories
 			return await _context.Categories.ToListAsync();
 		}
 
-		public async Task<PagedList<Category>> GetCategories(Filter filter)
+		/*public async Task<List<Category>> GetCategories(F)
 		{
-			var list = _context.Categories.AsQueryable();
-			var recordsTotal = list.Count();
-			var data = await list.Skip(filter.Start).Take(filter.Length).ToListAsync();
-
-			return new PagedList<Category>(data, recordsTotal, filter.Length);
-		}
+			var list = _context.Categories.ToListAsync();
+			//var recordsTotal = list.Count();
+			return list
+		}*/
 
         public async Task<List<Category>> GetCategoriesByProductId(int productId)
         {

@@ -7,6 +7,8 @@ using ShopApp.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
 
 namespace ShopApp.Api.Controllers
 {
@@ -17,16 +19,42 @@ namespace ShopApp.Api.Controllers
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public AccountController(
+        public AccountController(
 			UserManager<ApplicationUser> userManager,
 			RoleManager<IdentityRole> roleManager,
-			IConfiguration configuration)
+			IConfiguration configuration,
+			IHttpContextAccessor httpContextAccessor)
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
 			_configuration = configuration;
+			_httpContextAccessor = httpContextAccessor;
 		}
+		[HttpGet("/users")]
+		public async Task<IActionResult> GetUsers()
+		{
+			var listUsers = await _userManager.Users.ToListAsync();
+			return Ok(listUsers);
+		}
+
+		[HttpGet("/profile")]
+		public async Task<IActionResult> GetUserInfo()
+		{
+			var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+			if (userName == null)
+				return BadRequest();
+			
+			var user = await _userManager.FindByNameAsync(userName);
+			if(user == null)
+				return NotFound();
+			return Ok(user);
+		}
+
+		[HttpPut("/update-user")]
+		public async Task<IActionResult> Update()
+
 
 		[HttpPost("/login")]
 

@@ -16,32 +16,27 @@ namespace ShopApp.Api.Controllers
         }
 
         [HttpGet("/report/topSoldProducts")]
-        public async Task<IActionResult> GetTopSoldProducts(int num)
+        public async Task<IActionResult> GetTopSoldProducts()
         {
-            if (num == 0)
-                return BadRequest();
+           
                 
-            var result = await _reportRepository.GetTopProducts(num);
+            var result = await _reportRepository.GetTopProducts();
             return Ok(result);
         }
 
         [HttpGet("/report/topCategories")]
-        public async Task<IActionResult> GetTopCategories(int num)
+        public async Task<IActionResult> GetTopCategories()
         {
-            if (num == 0)
-                return BadRequest();
+           
 
-            var result = await _reportRepository.GetTopCategories(num);
+            var result = await _reportRepository.GetTopCategories();
             return Ok(result);
         }
 
         [HttpGet("/report/topReviewProducts")]
-        public async Task<IActionResult> GetTopRatingProduct(int num)
+        public async Task<IActionResult> GetTopRatingProduct()
         {
-            if (num == 0)
-                return BadRequest();
-
-            var result = await _reportRepository.GetTopReviewProducts(num);
+            var result = await _reportRepository.GetTopReviewProducts();
             return Ok(result);
         }
 

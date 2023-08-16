@@ -20,7 +20,6 @@ function listProduct(){
         url: baseUrl + '/products',
         type: 'GET',
         success: function (res) {
-
             console.log(res.data.$values)
             for (let item of res.data.$values) {
                 empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description,imageUrl:item.imageUrl })
@@ -59,11 +58,16 @@ function listProduct(){
                 },
                 {
                     targets : 5,
-                    //data:'imageUrl',
+                    data:'imageUrl',
                     name:'Image',
                     render: function(data, type, row) {
                         if (type === 'display') {
-                            return '<img src="' + row.imageUrl + '" alt="Product Image" width="100">';
+                            if(data){
+                                return '<img src="' + data + '" alt="Product Image" width="100">';
+                            }
+                            else{
+                                return '<a href="#" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#uploadImage" onclick=getProductId('+row.id+')>Upload</a>'
+                            }
                         }
                         return data; 
                     },
@@ -109,7 +113,6 @@ function getProductId(id){
 
 
 function uploadImage(){
-    
     var productId = $('#upload-id').val()
     var formFile = $('#upload-image')[0].files;
     
@@ -127,7 +130,7 @@ function uploadImage(){
         data:formData,
         success:function(){
             $('#uploadImage').modal('hide')
-            listProduct()
+            location.reload()
             console.log('thanh cong')
         }
     })

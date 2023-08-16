@@ -5,7 +5,7 @@ namespace ShopApp.Api.Interfaces
 {
 	public interface IProductRepository
 	{
-		Task<PagedList<Product>> GetProducts(Filter filter);
+		Task<List<Product>> GetProducts(Filter filter);
 		Task<List<Product>> GetAllProducts();
 		Task<Product> GetProductById(int id);
 		Task<Product> Create(Product product);

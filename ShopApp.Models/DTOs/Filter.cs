@@ -8,9 +8,10 @@ namespace ShopApp.Models.DTOs
 {
 	public class Filter
 	{
-		public int Start { get; set; }
-		public int Length { get; set; }
+		public int? Start { get; set; }
+		public int? Length { get; set; }
 		public string? SearchValue { get; set; }
 		public string? Sort { get; set; }
+		public int? CategoryId { get; set; } 
 	}
 }

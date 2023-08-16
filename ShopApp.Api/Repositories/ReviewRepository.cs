@@ -35,7 +35,7 @@ namespace ShopApp.Api.Repositories
 
 		public async Task<List<Review>> GetReviews(int productId)
 		{
-			return await _context.Reviews.Where(x=>x.OrderDetail.ProductId == productId).ToListAsync();
+			return await _context.Reviews.Include(x=>x.OrderDetail).Where(x=>x.OrderDetail.ProductId == productId).ToListAsync();
 		}
 
 		public async Task<bool> HasReviewed(string user, int orderDetailId)

@@ -1,29 +1,210 @@
-﻿<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a class="navbar-brand" asp-area="" asp-page="/admin">Admin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="https://localhost:6999/index">Shop</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/admin/product">Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="/admin/category">Category</a>
-                    </li>
-                    <li class="nav-item">
-                        <a type="button" class="nav-link text-dark" onclick="btnLogout()">Logout</a>
-                    </li>
-
-
-                </ul>
+﻿<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
+<header>
+  <nav
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+  >
+    <div class="container">
+      <a class="navbar-brand" asp-area="" asp-page="/admin">Admin</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="navbar-collapse collapse d-sm-inline-flex justify-content-between"
+      >
+        <ul class="navbar-nav flex-grow-1">
+          <li class="nav-item">
+            <a
+              class="nav-link text-dark"
+              asp-area=""
+              asp-page="https://localhost:6999">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/admin/product">Product</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/admin/category">Category</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/admin/users">Users</a>
+          </li>
+          <li>
+            <div class="dropdown">
+              <button
+                class="btn btn-secondary border-0 bg-transparent text-dark dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Report
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <button
+                    type="button"
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#topCategories">
+                    Top categories
+                  </button>
+                </li>
+                <li><button
+                    type="button"
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#topBestProduct">
+                    Top sold product
+                  </button></li>
+                <li>
+                  <button
+                    type="button"
+                    class="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#topReviewedProduct">
+                    Top rating product
+                  </button>
+                </li>
+              </ul>
             </div>
-        </div>
-    </nav>
+          </li>
+          <li class="nav-item">
+            <a type="button" class="nav-link text-dark" onclick="btnLogout()"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 </header>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="topCategories"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Top categories</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-border">
+          <thead>
+            <th>#</th>
+            <th>Category</th>
+            <th>Product quantity</th>
+          </thead>
+          <tbody id="topCategoryList"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="topBestProduct"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Top best seller products
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-border">
+          <thead>
+            <th>#</th>
+            <th>Product</th>
+            <th>Sold quantity</th>
+          </thead>
+          <tbody id="topSoldProducts"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="topReviewedProduct"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Top best review products
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-border">
+          <thead>
+            <th>#</th>
+            <th>Product</th>
+            <th>Rating</th>
+          </thead>
+          <tbody id="topReviewProducts"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/admin/report.js"></script>

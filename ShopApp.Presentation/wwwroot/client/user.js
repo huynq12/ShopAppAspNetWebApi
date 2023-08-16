@@ -10,8 +10,41 @@ $(document).ready(function () {
             }
         }
     });
+    getProfile()
     displayListOrders()
 })
+function getProfile(){
+    var html = ''
+    $.ajax({
+        url: baseUrl + '/profile',
+        type: 'GET',
+        success:function(res){
+            console.log(res)
+            html = `
+            <table class="table table-bordered">
+                <tr>
+                    <td>Email:</td>
+                    <td>${res.email}</td>
+                </tr>
+                <tr>
+                    <td>Full name:</td>
+                    <td>${res.fullName}</td>
+                </tr>
+                <tr>
+                    <td>Phone number:</td>
+                    <td>${res.phoneNumber}</td>
+                </tr>
+                <tr>
+                    <td>Address:</td>
+                    <td>${res.address}</td>
+                </tr>
+            </table>
+            `
+            $('#profile').html(html)
+        }
+    })
+}
+
 function displayListOrders() {
     var ordersHtml = ''
     $.ajax({
@@ -34,6 +67,7 @@ function displayListOrders() {
         }
     })
 }
+
 function viewOrder(id){
     $.ajax({
         url: baseUrl +'/order/'+id,

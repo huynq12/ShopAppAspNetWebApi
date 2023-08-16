@@ -5,11 +5,11 @@
 	<!-- container -->
 	<div class="container">
 		<!-- row -->
-		<div class="row">
+		<div class="row" id="product-img">
 			<!-- Product main img -->
 			<div class="col-md-5 col-md-push-2">
 				<div id="product-main-img">
-					<div class="product-preview">
+					 @* <div class="product-preview">
 						<img src="./img/product01.png" alt="">
 					</div>
 
@@ -23,7 +23,7 @@
 
 					<div class="product-preview">
 						<img src="./img/product08.png" alt="">
-					</div>
+					</div>   *@
 				</div>
 			</div>
 			<!-- /Product main img -->
@@ -31,7 +31,7 @@
 			<!-- Product thumb imgs -->
 			<div class="col-md-2  col-md-pull-5">
 				<div id="product-imgs">
-					<div class="product-preview">
+					 <div class="product-preview">
 						<img src="./img/product01.png" alt="">
 					</div>
 
@@ -45,7 +45,7 @@
 
 					<div class="product-preview">
 						<img src="./img/product08.png" alt="">
-					</div>
+					</div>  
 				</div>
 			</div>
 			<!-- /Product thumb imgs -->
@@ -53,73 +53,7 @@
 			<!-- Product details -->
 			<div class="col-md-5">
 				<div class="product-details" id="product-details">
-					@* <h2 class="product-name">ASUS ProArt StudioBook Pro 17 W700G1T-AV046T</h2>
-					<div>
-					<div class="product-rating">
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star-o"></i>
-					</div>
-					<a class="review-link" href="#">10 Review(s) | Thêm đánh giá</a>
-					</div>
-					<div>
-					<h3 class="product-price">45.600.000 đ <del class="product-old-price">46.600.000 đ</del></h3>
-					<span class="product-available">In Stock</span>
-					</div>
-					<p>Màn hình : 15.6 inch, 1920 x 1080 Pixels, IPS, 144 Hz, Anti-glare LED-backlit</p>
-					<p>CPU : Intel, Core i5, 10300H</p>
-					<p>Tản Nhiệt Khí : HP 800 G1 Tiêu Chuẩn</p>
-					<p>RAM : 8 GB (1 thanh 8 GB), DDR4, 2933 MHz</p>
-					<p>Ổ cứng : SSD 512 GB</p>
-					<p>Đồ họa : NVIDIA GeForce GTX 1650 4GB; Intel UHD Graphics</p>
-					<div class="product-options">
-					<label>
-					Kích cỡ
-					<select class="input-select">
-					<option value="0">X</option>
-					</select>
-					</label>
-					<label>
-					Màu sắc
-					<select class="input-select">
-					<option value="0">Red</option>
-					</select>
-					</label>
-					</div>
-
-					<div class="add-to-cart">
-					<div class="qty-label">
-					Số lượng
-					<div class="input-number">
-					<input type="number">
-					<span class="qty-up">+</span>
-					<span class="qty-down">-</span>
-					</div>
-					</div>
-					<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
-					</div>
-
-					<ul class="product-btns">
-					<li><a href="#"><i class="fa fa-heart-o"></i> Thêm vào danh sách yêu thích</a></li>
-					<li><a href="#"><i class="fa fa-exchange"></i> Thêm vào để so sánh</a></li>
-					</ul>
-
-					<ul class="product-links">
-					<li>Loại:</li>
-					<li><a href="#">TAI NGHE</a></li>
-					<li><a href="#">PHỤ KIỆN</a></li>
-					</ul>
-
-					<ul class="product-links">
-					<li>Chia sẻ:</li>
-					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-					<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-					<li><a href="#"><i class="fa fa-envelope"></i></a></li>
-					</ul> *@
-
+					
 				</div>
 			</div>
 			<!-- /Product details -->
@@ -336,143 +270,3 @@
 <script src="~/CustomerContent/js/jquery.min.js"></script>
 
 <script type="text/javascript" src="/client/product.js"></script>
-<script>
-	var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-	function addToCart(productId, quantity) {
-			var existingItem = cartItems.find(item => item.productId === productId);
-
-			if (existingItem) {
-				existingItem.quantity += quantity;
-			} else {
-				cartItems.push({ productId, quantity });
-			}
-			localStorage.setItem('cartItems', JSON.stringify(cartItems));
-			alert('add product to cart')
-			displayMiniCartItemQuantity()
-	}
-	function displayMiniCartItemQuantity(){
-		$('#cartItemQuantity').html(cartItems.length)
-	}
-	function viewProduct(id) {
-			$.ajax({
-				url: baseUrl + '/view-product/' + id,
-				type: 'GET',
-				success: function (res) {
-					console.log(res)
-					var productDetail = `
-			<h2 class="product-name">${res.name}</h2>
-			<div>
-				<div class="product-rating">
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star"></i>
-					<i class="fa fa-star-o"></i>
-				</div>
-				<a class="review-link" href="#">10 Review(s) | Thêm đánh giá</a>
-			</div>
-			<div>
-				<h3 class="product-price">${res.price} đ <del class="product-old-price">46.600.000 đ</del></h3>
-				<span class="product-available">In Stock</span>
-			</div>
-			<p>Màn hình : ${res.screen}</p>
-			<p>CPU : ${res.cpu}</p>
-			<p>Tản Nhiệt Khí : HP 800 G1 Tiêu Chuẩn</p>
-			<p>RAM : ${res.ram}</p>
-			<p>Ổ cứng : ${res.hardDrive}</p>
-			<p>Nguồn :${res.power}</p>
-			<div class="product-options">
-				<label>
-					Kích cỡ
-					<select class="input-select">
-						<option value="0">X</option>
-					</select>
-				</label>
-				<label>
-					Màu sắc
-					<select class="input-select">
-						<option value="0">Red</option>
-					</select>
-				</label>
-			</div>
-
-			<div class="add-to-cart">
-				<div class="qty-label">
-					Số lượng
-					<div class="input-number">
-						<input type="number">
-						<span class="qty-up">+</span>
-						<span class="qty-down">-</span>
-					</div>
-				</div>
-				<button class="add-to-cart-btn" onclick="addToCart(${res.id},1)"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</button>
-			</div>
-
-			<ul class="product-btns">
-				<li><a href="#"><i class="fa fa-heart-o"></i> Thêm vào danh sách yêu thích</a></li>
-				<li><a href="#"><i class="fa fa-exchange"></i> Thêm vào để so sánh</a></li>
-			</ul>
-
-			<ul class="product-links">
-				<li>Loại:</li>
-				<li><a href="#">TAI NGHE</a></li>
-				<li><a href="#">PHỤ KIỆN</a></li>
-			</ul>
-
-			<ul class="product-links">
-				<li>Chia sẻ:</li>
-				<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-				<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-				<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-				<li><a href="#"><i class="fa fa-envelope"></i></a></li>
-			</ul>
-
-			`
-					$('#product-details').append(productDetail)
-				}
-			})
-		}
-	function displayReviews(id){
-		var reviewHtml = ''
-		var star = '<i class="fa fa-star"></i>'
-		$.ajax({
-			url:baseUrl + '/reviews/' +id,
-			type:'GET',
-			success:function(res){
-				for(let item of res.$values){
-					reviewHtml += '<div class="col-md-6"><div class="card mb-4"><div class="card-body">'
-					reviewHtml += '<h4 class="card-title">'+item.userName+'</h4>'
-					reviewHtml += '<p class-text>'
-					for(let i=1 ; i <= res.$values.length;i++){
-						reviewHtml +=star
-					}
-					reviewHtml += '</p>'
-					reviewHtml += '<p class="card-text">'+item.commentMsg+'</p>'
-					reviewHtml += '</div></div></div>'
-					 @* `
-							<div class="col-md-6" >
-								<div class="card mb-4"  >
-									<div class="card-body">
-										<h4 class="card-title">${item.userName}</h5>
-										<p class="card-text">
-											
-										</p>
-										<p class="card-text"></p>
-									</div>
-								</div>
-							</div>
-					` *@
-
-				}
-			}
-		})
-	}
-	$(document).ready(function () {
-
-		var urlParams = new URLSearchParams(window.location.search);
-		var productId = urlParams.get('id');
-		viewProduct(productId)
-		displayReviews(productId)
-	});
-
-</script>

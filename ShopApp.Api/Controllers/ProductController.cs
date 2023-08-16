@@ -59,10 +59,14 @@ namespace ShopApp.Api.Controllers
 				return NotFound();
 			return Ok(result);
 		}
+
+
 		[HttpGet("/view-product/{id}")]
 		public async Task<IActionResult> ViewProduct(int id)
-		{
+	{
             var listCategoryIds = await _categoryRepository.GetCategoryIdsByProductId(id);
+
+            var listImages = await _imageRepository.GetImagesByProductId(id);
 
             var product = await _productRepository.GetProductById(id);
             
@@ -122,6 +126,8 @@ namespace ShopApp.Api.Controllers
                 }
             }
 			var result = await _productRepository.Create(product);
+
+
             return Ok(result);
         }
         [HttpPut("/edit-product")]

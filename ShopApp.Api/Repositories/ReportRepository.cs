@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using ShopApp.Api.Data;
 using ShopApp.Api.Interfaces;
 using ShopApp.Models;
@@ -14,13 +15,13 @@ namespace ShopApp.Api.Repositories
         {
             _context = dataContext;
         }
-        public async Task<ReportModel<Category, int>> GetTopCategories(int num)
+        public async Task<ReportModel<Category, int>> GetTopCategories()
         {
             var topCategories = _context.ProductCategories
                          .GroupBy(pc => pc.CategoryId) 
                          .Select(g => new { CategoryId = g.Key, Count = g.Count() }) 
                          .OrderByDescending(x => x.Count)
-                         .Take(num)
+                         .Take(5)
                          .Join(_context.Categories, pc => pc.CategoryId, c => c.Id, (pc, c) => new { Category = c, pc.Count }); // Kết hợp với bảng danh mục để lấy danh mục thay vì CategoryId
 
             List<Category> list = new List<Category>();
@@ -33,11 +34,11 @@ namespace ShopApp.Api.Repositories
             return new ReportModel<Category, int>(list, count);
         }
 
-        public async Task<ReportModel<Product, int>> GetTopProducts(int num)
+        public async Task<ReportModel<Product, int>> GetTopProducts()
         {
             var topSoldProducts = _context.Products
                 .OrderByDescending(product => product.SoldQuantity)
-                .Take(num)
+                .Take(5)
                 .ToList();
             List<int> soldList = new List<int>();
             foreach(var product in topSoldProducts)
@@ -47,20 +48,30 @@ namespace ShopApp.Api.Repositories
             return new ReportModel<Product, int>(topSoldProducts, soldList);
         }
 
-        public async Task<ReportModel<Product, double>> GetTopReviewProducts(int num)
+        public async Task<ReportModel<Product, double>> GetTopReviewProducts()
         {
-            var topRatedProducts = _context.Products
-            .OrderByDescending(product => product.Reviews.Average(review => review.Rating))
-            .Take(num)
-            .ToList();
-            List<double> ratingValueList = new List<double>();
-            foreach(var product in topRatedProducts)
-            {
-                double averageRating = product.Reviews.Average(review => review.Rating);
-                ratingValueList.Add(averageRating);
-            }
-            return new ReportModel<Product, double>(topRatedProducts, ratingValueList);
+            var topProducts = _context.Reviews
+                .GroupBy(c => c.OrderDetail.ProductId)
+                .Select(g => new
+                {
+                    ProductId = g.Key,
+                    AverageRating = g.Average(c => c.Rating)
+                })
+                .OrderByDescending(g => g.AverageRating)
+                .Take(5)
+                .Join(_context.Products, cm => cm.ProductId, p => p.Id, (cm, p) => new { Product = p, AverageRate = cm.AverageRating });
 
+
+            List<Product> list = new List<Product>();
+            List<double> averageRatingList = new List<double>();
+
+            foreach (var p in topProducts)
+            {
+                list.Add(p.Product);
+                averageRatingList.Add(p.AverageRate);
+            }
+
+            return new ReportModel<Product, double>(list, averageRatingList);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace ShopApp.Api.Interfaces
 {
 	public interface ICategoryRepository
 	{
-		Task<PagedList<Category>> GetCategories(Filter filter);	
+		//Task<PagedList<Category>> GetCategories(Filter filter);	
 		Task<List<Category>> GetAllCategories();
 		Task<List<Category>> GetCategoriesByProductId(int postId);
 		Task<List<int>> GetCategoryIdsByProductId(int productId);

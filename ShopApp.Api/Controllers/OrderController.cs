@@ -8,7 +8,7 @@ using ShopApp.Models.DTOs;
 
 namespace ShopApp.Api.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class OrderController : ControllerBase
 	{
@@ -77,7 +77,7 @@ namespace ShopApp.Api.Controllers
 				PhoneNumber = request.PhoneNumber,
 				Address = request.Address,
 				OrderDate = DateTime.Now,
-				Status = OrderStatus.Processing
+				Status = OrderStatus.New
 			};
 			if(request.CartItems.Any())
 			{
@@ -116,37 +116,47 @@ namespace ShopApp.Api.Controllers
 			if (user == null || user != existingOrder.User)
 				return BadRequest();
 
-			if (existingOrder.Status == OrderStatus.Success || existingOrder.Status == OrderStatus.Cancel)
+			if (existingOrder.Status == OrderStatus.Complete || existingOrder.Status == OrderStatus.Cancel)
 				return BadRequest();
 
 			switch (request.Status)
 			{
-				case OrderStatus.Success:
-					existingOrder.Status = OrderStatus.Success;
-					foreach (var item in existingOrder.OrderDetails)
-					{
-						var product = await _productRepository.GetProductById(item.ProductId);
-						if (product == null)
-							return NotFound();
+				case OrderStatus.Processing:
+                    foreach (var item in existingOrder.OrderDetails)
+                    {
+                        var product = await _productRepository.GetProductById(item.ProductId);
+                        if (product == null)
+                            return NotFound();
 
-						if (product.Quantity < item.Amount)
-							return BadRequest();
-						product.Quantity -= item.Amount;
-						product.SoldQuantity += item.Amount;
-						await _productRepository.Update(product);
-					}
+                        if (product.Quantity < item.Amount)
+                            return BadRequest();
+                    }
+                    existingOrder.Status = OrderStatus.Processing;
+					break;
+                case OrderStatus.Shipped:
+                    foreach (var item in existingOrder.OrderDetails)
+                    {
+                        var product = await _productRepository.GetProductById(item.ProductId);
+                        if (product == null)
+                            return NotFound();
+
+                        if (product.Quantity < item.Amount)
+                            return BadRequest();
+
+                        product.Quantity -= item.Amount;
+                        product.SoldQuantity += item.Amount;
+                        await _productRepository.Update(product);
+                    }
+                    existingOrder.Status = OrderStatus.Shipped;
+					break;
+				case OrderStatus.Complete:
+					existingOrder.Status = OrderStatus.Complete;
 					break;
 				case OrderStatus.Cancel:
 					existingOrder.Status = OrderStatus.Cancel;
 					break;
-				default:
-					existingOrder.UserName = request.UserName;
-					existingOrder.Address = request.Address;
-					existingOrder.PhoneNumber = request.PhoneNumber;
-					break;
+				
 			}
-			
-
 			var updatedOrder = await _orderRepository.Update(existingOrder);
 			return Ok(updatedOrder);
 		}

@@ -40,13 +40,15 @@ namespace ShopApp.Api.Repositories
 
         }
 
-        public async Task<PagedList<Product>> GetProducts(Filter filter)
+        public async Task<List<Product>> GetProducts(Filter filter)
 		{
-			var list =  _context.Products.AsQueryable();
-			var recordsTotal = list.Count();
-			var data = await list.Skip(filter.Start).Take(filter.Length).ToListAsync();
-
-			return new PagedList<Product>(data, recordsTotal, filter.Length);
+			var list =  _context.Products.Include(x=>x.ProductCategories).ThenInclude(x=>x.Category).Include(x=>x.Images).AsQueryable();
+			if (filter.CategoryId.HasValue)
+			{
+				list = list.Where(p => p.ProductCategories.Any(pc => pc.CategoryId == filter.CategoryId));
+            }
+			
+			return list.ToList();
 		}
 
 		public async Task<Product> Update(Product product)

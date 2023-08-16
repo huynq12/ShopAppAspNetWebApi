@@ -57,8 +57,6 @@ namespace ShopApp.Api.Controllers
                         }
                     }
                 }
-                
-
             }
             catch (Exception ex)
             {
