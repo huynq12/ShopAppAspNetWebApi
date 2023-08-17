@@ -268,7 +268,7 @@ function updateProduct(){
             $('#product-edit').modal('hide')
             location.reload();
             setTimeout(500)
-            alert('thanh cong')
+            console.log('thanh cong')
         },
         error: function (e) {
             alert(JSON.stringify(e))

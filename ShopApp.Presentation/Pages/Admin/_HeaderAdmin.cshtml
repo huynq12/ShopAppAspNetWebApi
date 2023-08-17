@@ -35,8 +35,11 @@
           <li class="nav-item">
             <a class="nav-link text-dark" href="/admin/users">Users</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/admin/orders">Orders</a>
+          </li>
           <li>
-            <div class="dropdown">
+            <div class="dropdown" id="listButton">
               <button
                 class="btn btn-secondary border-0 bg-transparent text-dark dropdown-toggle"
                 type="button"
@@ -70,14 +73,11 @@
                     Top rating product
                   </button>
                 </li>
+
               </ul>
             </div>
           </li>
-          <li class="nav-item">
-            <a type="button" class="nav-link text-dark" onclick="btnLogout()"
-              >Logout</a
-            >
-          </li>
+          
         </ul>
       </div>
     </div>
@@ -214,4 +214,10 @@
 		localStorage.removeItem('token');
 		window.location = "/"
 	}
+  var token = localStorage.getItem('token');
+  var buttonStr = ''
+  if(token){
+    buttonStr += '<li class="nav-item"><a type="button" class="nav-link text-dark" onclick="btnLogout()">Logout</a></li>'
+  }
+  $('#listButton').append(buttonStr)
 </script>

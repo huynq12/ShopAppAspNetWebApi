@@ -126,6 +126,7 @@ namespace ShopApp.Api.Controllers
 
 			switch (request.Status)
 			{
+
 				case OrderStatus.Processing:
                     foreach (var item in existingOrder.OrderDetails)
                     {
@@ -138,6 +139,18 @@ namespace ShopApp.Api.Controllers
                     }
                     existingOrder.Status = OrderStatus.Processing;
 					break;
+				case OrderStatus.Shipping:
+                    foreach (var item in existingOrder.OrderDetails)
+                    {
+                        var product = await _productRepository.GetProductById(item.ProductId);
+                        if (product == null)
+                            return NotFound("Cannot find the product");
+
+                        if (product.Quantity < item.Amount)
+                            return BadRequest("The product quantity is not valid");
+                    }
+                    existingOrder.Status = OrderStatus.Shipping;
+                    break;
                 case OrderStatus.Shipped:
                     foreach (var item in existingOrder.OrderDetails)
                     {

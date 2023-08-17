@@ -45,7 +45,10 @@ function viewOrder(orderId){
                 submitOrder += '<a class="btn btn-secondary form-group mt-3" onclick=processOrder('+orderId+')>Process</a>';
             }
             if(res.status === 'Processing'){
-                submitOrder += '<a class="btn btn-info form-group mt-3" onclick=shippedOrder('+orderId+')>Shipped</a>';
+                submitOrder += '<a class="btn btn-info form-group mt-3" onclick=shipOrder('+orderId+')>Ship</a>';
+            }
+            if (res.status === 'Shipping') {
+                submitOrder += '<a class="btn btn-info form-group mt-3" onclick=shippedOrder(' + orderId + ')>Shipped</a>';
             }
             $('#admin-formFooter').append(submitOrder)
         }
@@ -75,7 +78,28 @@ function processOrder(id){
     }
     
 }
-
+function shipOrder(id) {
+    var orderData = {
+        orderId: id,
+        status: 'Shipping'
+    }
+    console.log(orderData)
+    if (confirm("Ship this order?")) {
+        $.ajax({
+            url: baseUrl + '/update-order-admin',
+            type: 'PUT',
+            contentType: "application/JSON",
+            data: JSON.stringify(orderData),
+            success: function () {
+                console.log('success')
+                location.reload()
+            },
+            error: function () {
+                alert("Error");
+            }
+        })
+    }
+}
 
 function shippedOrder(id){
     var orderData = {

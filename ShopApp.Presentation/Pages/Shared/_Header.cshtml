@@ -8,11 +8,9 @@
 				<li><a href="#"><i class="fa fa-envelope-o"></i> 123abc@email.com</a></li>
 				<li><a href="#"><i class="fa fa-map-marker"></i> 173 Nguyên Đình</a></li>
 			</ul>
-			<ul class="header-links pull-right">
-				<li><a href="/admin"><i class="fa fa-user-o"></i> Admin</a></li>
-				<li><a href="/login"><i class="fa fa-user-o"></i> Login</a></li>
-				<li><a href="/register"><i class="fas fa-key"></i> Register</a></li>
-				<li><a type="button" class="text-white border-0 bg-transparent" onclick="btnLogout()"> Logout</a></li>
+			<ul class="header-links pull-right" id="listButton">
+				
+			
 			</ul>
 		</div>
 	</div>
@@ -180,8 +178,24 @@
 <script src="/lib/jquery/dist/jquery.js"></script>
 <script src="/lib/jquery/dist/jquery.min.js"></script>
 <script>
+
 	$(document).ready(function(){
     	displayMiniCartItemQuantity()
+		var token = localStorage.getItem('token');
+		//var userRole = parseUserRoleFromToken(token); 
+		var buttonStr = ''
+		if(token){
+			buttonStr += '<li><a type="button" class="text-white border-0 bg-transparent" onclick="btnLogout()"> Logout</a></li>'		
+		}
+		else{
+			buttonStr += '<li><a href="/login"><i class="fa fa-user-o"></i> Login</a></li>'
+			buttonStr += '<li><a href="/register"><i class="fas fa-key"></i> Register</a></li>'
+		}
+		
+		@* if (userRole === 'Admin') {
+			buttonStr += '<li><a href="/admin"><i class="fa fa-user-o"></i> Admin</a></li>'
+		}	 *@
+		$('#listButton').append(buttonStr)
 	})
 	function displayMiniCartItemQuantity(){
 		var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -191,4 +205,6 @@
 		localStorage.clear()
 		window.location = "/"
 	}
+	
+
 </script>

@@ -29,6 +29,113 @@
 
         </tbody>
     </table>
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="product-create" tabindex="-1" aria-labelledby="product-create-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="product-create-label">New product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data">
+                        <label>Name</label>
+                        <input class="form-control" id="product-create-name" />
+                        <label>Quantity</label>
+                        <input class="form-control" id="product-create-quantity" />
+                        <label>Price</label>
+                        <input class="form-control" id="product-create-price" />
+                        <label>Description</label>
+                        <input class="form-control" id="product-create-description" />
+                        <label>CPU</label>
+                        <input class="form-control" id="product-create-cpu" />
+                        <label>RAM</label>
+                        <input class="form-control" id="product-create-ram" />
+                        <label>Hard drive</label>
+                        <input class="form-control" id="product-create-hardDrive" />
+                        <label>Screen</label>
+                        <input class="form-control" id="product-create-screen" />
+                        <label>Power</label>
+                        <input class="form-control" id="product-create-power" />
+                        <label>Categories</label>
+                        <select class="product-categories" id="product-create-categories" name="product-create-categories[]" multiple>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addNewProduct()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="product-edit" tabindex="-1" aria-labelledby="product-edit-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="product-edit-label">Edit product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data">
+                        <label>Id</label>
+                        <input class="form-control" id="product-edit-id" disabled />
+                        <label>Name</label>
+                        <input class="form-control" id="product-edit-name" />
+                        <label>Quantity</label>
+                        <input class="form-control" id="product-edit-quantity" />
+                        <label>Price</label>
+                        <input class="form-control" id="product-edit-price" />
+                        <label>Description</label>
+                        <input class="form-control" id="product-edit-description" />
+                        <label>CPU</label>
+                        <input class="form-control" id="product-edit-cpu" />
+                        <label>RAM</label>
+                        <input class="form-control" id="product-edit-ram" />
+                        <label>Hard drive</label>
+                        <input class="form-control" id="product-edit-hardDrive" />
+                        <label>Screen</label>
+                        <input class="form-control" id="product-edit-screen" />
+                        <label>Power</label>
+                        <input class="form-control" id="product-edit-power" />
+                        <label>Image</label>
+                        <input type="file" class="form-control" id="product-edit-image" accept="image/*">
+                        <label>Categories</label>
+                        <select class="product-edit-categories" id="product-edit-categories" name="product-edit-categories[]" multiple>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateProduct()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="uploadImage" tabindex="-1" aria-labelledby="uploadImageLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="uploadImageLabel">Upload image</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadForm">
+                        <input class="form-control" id="upload-id" disabled>
+                        <input type="file" id="upload-image" name="upload-image" multiple>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="uploadImage()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastProduct">
   <div class="toast create-product" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
@@ -53,112 +160,6 @@
 </div>
 
 
-<!-- Create Modal -->
-<div class="modal fade" id="product-create" tabindex="-1" aria-labelledby="product-create-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="product-create-label">New product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form enctype="multipart/form-data">
-                    <label>Name</label>
-                    <input class="form-control" id="product-create-name" />
-                    <label>Quantity</label>
-                    <input class="form-control" id="product-create-quantity" />
-                    <label>Price</label>
-                    <input class="form-control" id="product-create-price" />
-                    <label>Description</label>
-                    <input class="form-control" id="product-create-description" />
-                    <label>CPU</label>
-                    <input class="form-control" id="product-create-cpu" />
-                    <label>RAM</label>
-                    <input class="form-control" id="product-create-ram" />
-                    <label>Hard drive</label>
-                    <input class="form-control" id="product-create-hardDrive" />
-                    <label>Screen</label>
-                    <input class="form-control" id="product-create-screen" />
-                    <label>Power</label>
-                    <input class="form-control" id="product-create-power" />  
-                    <label>Categories</label>
-                    <select class="product-categories" id="product-create-categories" name="product-create-categories[]" multiple>
-                    </select>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addNewProduct()">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Modal -->
-<div class="modal fade" id="product-edit" tabindex="-1" aria-labelledby="product-edit-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="product-edit-label">Edit product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form enctype="multipart/form-data">
-                    <label>Id</label>
-                    <input class="form-control" id="product-edit-id" disabled />
-                    <label>Name</label>
-                    <input class="form-control" id="product-edit-name" />
-                    <label>Quantity</label>
-                    <input class="form-control" id="product-edit-quantity" />
-                    <label>Price</label>
-                    <input class="form-control" id="product-edit-price" />
-                    <label>Description</label>
-                    <input class="form-control" id="product-edit-description" />
-                    <label>CPU</label>
-                    <input class="form-control" id="product-edit-cpu" />
-                    <label>RAM</label>
-                    <input class="form-control" id="product-edit-ram" />
-                    <label>Hard drive</label>
-                    <input class="form-control" id="product-edit-hardDrive" />
-                    <label>Screen</label>
-                    <input class="form-control" id="product-edit-screen" />
-                    <label>Power</label>
-                    <input class="form-control" id="product-edit-power" />
-                    <label>Image</label>
-                    <input type="file" class="form-control" id="product-edit-image" accept="image/*">
-                    <label>Categories</label>
-                    <select class="product-edit-categories" id="product-edit-categories" name="product-edit-categories[]" multiple>
-                    </select>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="updateProduct()">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="uploadImage" tabindex="-1" aria-labelledby="uploadImageLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="uploadImageLabel">Upload image</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="uploadForm">
-            <input class="form-control" id="upload-id" disabled>
-            <input type="file" id="upload-image" name="upload-image" multiple>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="uploadImage()">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>

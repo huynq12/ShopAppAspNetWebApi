@@ -10,6 +10,7 @@ namespace ShopApp.Models.DTOs
     {
         New,
         Processing,
+        Shipping,
         Shipped,
         Complete,
         Cancel,

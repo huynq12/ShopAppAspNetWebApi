@@ -19,6 +19,7 @@ function getProfile(){
         url: baseUrl + '/profile',
         type: 'GET',
         success:function(res){
+
             var greet = 'Wellcome '
             greet += res.fullName
             $('#greeter').html(greet)
@@ -26,7 +27,7 @@ function getProfile(){
             $('#user-edit-fullName').val(res.fullName)
             $('#user-edit-phoneNumber').val(res.phoneNumber)
             $('#user-edit-address').val(res.address)
-            //console.log(res)
+            console.log(res)
             html += '<table class="table table-bordered"><tr><td>Email:</td><td>'+res.email+'</td></tr>'
             html += '<tr><td>Full name:</td><td>'
             html += res.fullName == null ? '' : res.fullName + '</td></tr>'
