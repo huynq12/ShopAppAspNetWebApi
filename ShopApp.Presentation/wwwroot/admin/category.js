@@ -49,7 +49,14 @@ function addNewCategory(){
             $('#category-create-name').html('')
             $('#category-create-description').html('')
             $('#category-create').modal('hide')
+            $('.modal-backdrop').hide();
             displayCategories()
+
+            var toastInstance = $('.add-category').clone();
+            toastInstance.removeClass('d-none');
+            $('.toast-container').append(toastInstance);
+            var toast = new bootstrap.Toast(toastInstance[0]);
+            toast.show();
         }
     })
 }
@@ -78,7 +85,14 @@ function updateCategory(){
         success:function(){
             //alert('update successfully')
             $('#category-edit').modal('hide')
+            $('.modal-backdrop').hide();
             displayCategories()
+
+            var toastInstance = $('.edit-category').clone();
+            toastInstance.removeClass('d-none');
+            $('.toast-container').append(toastInstance);
+            var toast = new bootstrap.Toast(toastInstance[0]);
+            toast.show();
         },
         error:function(error){
             console.log(JSON.stringify(error))
@@ -94,7 +108,11 @@ function deleteCategory(id){
             dataType:'json',
             success:function(){
                 displayCategories()
-                alert('Delete successfully')
+                var toastInstance = $('.delete-category').clone();
+                toastInstance.removeClass('d-none');
+                $('.toast-container').append(toastInstance);
+                var toast = new bootstrap.Toast(toastInstance[0]);
+                toast.show();
             },
             error:function(error){
                 console.log(JSON.stringify(error))

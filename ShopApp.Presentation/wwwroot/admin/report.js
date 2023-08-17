@@ -1,5 +1,14 @@
 baseUrl = 'https://localhost:7000'
 $(document).ready(function(){
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            var token = localStorage.getItem('token');
+
+            if (token) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            }
+        }
+    });
     topCategories()
     topSoldProducts()
     topReviewProducts()

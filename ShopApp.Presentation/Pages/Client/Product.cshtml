@@ -4,6 +4,7 @@
 <div class="section">
 	<!-- container -->
 	<div class="container">
+		<div id="toast"></div>
 		<!-- row -->
 		<div class="row" id="product-img">
 			<!-- Product main img -->
@@ -264,7 +265,22 @@
 		<!-- /row -->
 	</div>
 	<!-- /container -->
+	@* Toast message *@
+	<div class="toast-container position-fixed bottom-0 end-0 p-3">
+		<div class="toast addCart" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+		<div class="toast-header">
+			<strong class="me-auto">System</strong>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">
+			Add product to cart
+		</div>
+		</div>
+	</div>
 </div>
+
+
+
 							
 <!-- /Section -->
 <script src="~/CustomerContent/js/jquery.min.js"></script>

@@ -1,3 +1,4 @@
+
 const baseUrl = 'https://localhost:7000'
 $(document).ready(function () {
 
@@ -16,14 +17,25 @@ $(document).ready(function () {
 			} else {
 				cartItems.push({ productId, quantity });
 			}
+
 			localStorage.setItem('cartItems', JSON.stringify(cartItems));
-			alert('add product to cart')
 			displayMiniCartItemQuantity()
+			console.log('thanh cong')
+			showSuccessToast()
+		
+
 	}
 	function displayMiniCartItemQuantity(){
 		$('#cartItemQuantity').html(cartItems.length)
 	}
-
+	function showSuccessToast() {
+		toast({
+			title: "System",
+			message: "Successfully",
+			type: "success",
+			duration: 5000
+		});
+	}
 	function displayProductImages(id){
         var imgHtml = ''
 		$.ajax({
@@ -45,7 +57,7 @@ $(document).ready(function () {
 				url: baseUrl + '/view-product/' + id,
 				type: 'GET',
 				success: function (res) {
-					console.log(res)
+					//console.log(res)
 					var productDetail = `
 			<h2 class="product-name">${res.name}</h2>
 			<div>
@@ -126,7 +138,7 @@ $(document).ready(function () {
 			url:baseUrl + '/reviews/' +id,
 			type:'GET',
 			success:function(res){
-                console.log(res)
+                //console.log(res)
                 var reviewCount = 'Đánh giá ('+res.$values.length+')'
 				for(let item of res.$values){
 					reviewHtml += '<div class="col-md-6"><div class="card mb-4"><div class="card-body">'

@@ -20,7 +20,7 @@ function listProduct(){
         url: baseUrl + '/products',
         type: 'GET',
         success: function (res) {
-            console.log(res.data.$values)
+            //console.log(res.data.$values)
             for (let item of res.data.$values) {
                 empData.push({ id: item.id, name: item.name, quantity: item.quantity, price: item.price, description: item.description,imageUrl:item.imageUrl })
             }
@@ -111,7 +111,6 @@ function getProductId(id){
 
 // }
 
-
 function uploadImage(){
     var productId = $('#upload-id').val()
     var formFile = $('#upload-image')[0].files;
@@ -159,9 +158,9 @@ function addNewProduct() {
         contentType: 'application/JSON;charset=utf-8',
         success: function () {
             $('#product-create').modal('hide')
-            location.reload();
+            $('.modal-backdrop').hide();
+            listProduct()
             setTimeout(500)
-            alert('thanh cong')
         },
         error: function (error) {
             alert(JSON.stringify(error));
@@ -286,7 +285,7 @@ function deleteProduct(id) {
             success: function () {
                 location.reload()
                 setTimeout(500)
-                alert("Delete successfully");
+                showSuccessToast()
             },
             error: function () {
 

@@ -73,7 +73,6 @@ $('#order-edit-form').submit(function (e) {
             success:function(){
                 console.log('success')
                 window.location = '/user'
-                alert('edit successfully')
             },
             error: function () {
                 alert("Error");
@@ -146,7 +145,6 @@ function submitReview(){
         contentType: "application/JSON",
         data: JSON.stringify(reviewData),
         success:function(){
-            alert('review ok')
             $('#reviewModal').modal('hide')
             $('#review-commentMsg').val('')
             $('#review-rating').val('')

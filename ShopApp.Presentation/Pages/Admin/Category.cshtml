@@ -11,6 +11,8 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#category-create">
   New category
 </button>
+
+
     <table class="table table-bordered table-striped dt-responsive nowrap">
         <thead>
             <th>Id</th>
@@ -25,13 +27,45 @@
 </div>
 
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div class="toast add-category" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+    <div class="toast-header bg-primary">
+        <strong class="me-auto">System</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        Add category successfully
+    </div>
+  </div>
+
+  <div class="toast edit-category" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+    <div class="toast-header bg-primary">
+        <strong class="me-auto">System</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        Edit category successfully
+    </div>
+  </div>
+
+  <div class="toast delete-category" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+    <div class="toast-header bg-primary">
+        <strong class="me-auto">System</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+        Delete category successfully
+    </div>
+  </div>
+</div>
+
 
 <!-- Create category -->
 <div class="modal fade" id="category-create" tabindex="-1" aria-labelledby="category-create-label" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="category-create-label"></h1>
+        <h1 class="modal-title fs-5" id="category-create-label">New category</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">

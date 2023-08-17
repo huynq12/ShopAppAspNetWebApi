@@ -35,7 +35,7 @@ function displayCart() {
                     var cartItemHtml = '<tr><td><img src="/CustomerContent/img/new-pictures/laptop1.jpg" style="width:100px;height:100px" class="img-sm"></td>'
                     cartItemHtml += '<td>' + product.name + '</td>'
                     cartItemHtml += '<td>' + product.price + '</td>'
-                    cartItemHtml += '<td><button class="btn btn-success m-1" onclick=reduceCartItem(' + item.productId + ',1)>-</button><input type="number" value="' + item.quantity + '" style="width:50px" disabled/><button class="btn btn-success m-1" onclick=addToCart(' + item.productId + ',1)>+</button><p><button class="btn btn-danger" onclick=removeCartItemAction(' + item.productId + ')>Remove</button></p></td>'
+                    cartItemHtml += '<td><button  class="btn btn-success m-1" onclick=reduceCartItem(' + item.productId + ',1)>-</button><input type="number" value="' + item.quantity + '" style="width:50px" disabled/><button class="btn btn-success m-1" onclick=addToCart(' + item.productId + ',1)>+</button><p><button style="width:50px" class="btn btn-danger" onclick=removeCartItemAction(' + item.productId + ')>Remove</button></p></td>'
                     cartItemHtml += '<td>' + total + '</td>'
                     cartItemHtml += '</tr>'
 

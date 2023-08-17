@@ -50,7 +50,7 @@ function displayUserOrders(){
                 html += '<td>' + item.address + '</td>'
                 html += '<td>'+item.orderDate+'</td>'
                 html += '<td>'+item.status+'</td>'
-                html += '<td><a class="btn btn-info">View</a></td>'
+                html += '<td><a href="/admin/orderDetail?id='+item.id+'" class="btn btn-info">View</a></td>'
                 // if(item.status == 'New')
                 //     html += ' | <a class="btn btn-success">Process</a>'
                 // if(item.status == 'Processing')
