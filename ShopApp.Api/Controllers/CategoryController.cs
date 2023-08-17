@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using ShopApp.Api.Interfaces;
@@ -43,6 +44,8 @@ namespace ShopApp.Api.Controllers
             return Ok(result);
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpPost("/create-category")]
         public async Task<IActionResult> Create([FromBody]CategoryDto request)
         {
@@ -58,6 +61,7 @@ namespace ShopApp.Api.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("/update-category")]
         public async Task<IActionResult> Update(CategoryDto request)
         {
@@ -72,6 +76,8 @@ namespace ShopApp.Api.Controllers
             return Ok(existingCategory);
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete("/delete-category/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

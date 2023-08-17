@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopApp.Api.Interfaces;
 using ShopApp.Models;
@@ -29,6 +30,8 @@ namespace ShopApp.Api.Controllers
 			return Ok(list);
 		}
 
+
+		[Authorize]
 		[HttpPost("/place-review")]
 		public async Task<IActionResult> PlaceReview([FromBody] AddReviewRequest request)
 		{

@@ -37,19 +37,20 @@ function viewOrder(orderId){
                 orderDetailHtml += '<td>'+list[i].price+'</td>'
                 orderDetailHtml += '<td>'+list[i].amount+'</td>'
                 orderDetailHtml += '<td>'+list[i].price*list[i].amount+'</td>'
-                if(res.status == "Success"){
+                if(res.status == "Complete"){
                     orderDetailHtml += '<td><a href="/product?id='+list[i].productId+'" class="btn btn-warning">View</a> | <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal" onclick=reviewFormAction('+list[i].id+')>Review</button></td>'
                 }
                 orderDetailHtml += '</tr>';
             }
             $('#orderDetail').html(orderDetailHtml)  
-            if(res.status === 'Processing'){
-                console.log('alo')
-                var saveButton = '';
-                saveButton += '<button type="submit" class="btn btn-info form-group mt-3">Save</button>';
-                $('#formFooter').append(saveButton)
+            var submitOrder = '';
+            if(res.status == 'New' || res.status == 'Processing'){
+                submitOrder += '<a class="btn btn-danger form-group mt-3" onclick=cancelOrder('+orderId+')>Cancel</a>';
             }
-
+            if(res.status === 'Shipped'){
+                submitOrder += '<a class="btn btn-info form-group mt-3" onclick=completeOrder('+orderId+')>Complete</a>';
+            }
+            $('#formFooter').append(submitOrder)
         }
     })
 }
@@ -83,7 +84,53 @@ $('#order-edit-form').submit(function (e) {
 function reviewFormAction(orderDetailId){
     $('#review-id').val(orderDetailId)
 }
+function completeOrder(id){
+    var orderData = {
+        orderId : id,
+        status : 'Complete'
+    }
+    console.log(orderData)
+    if(confirm("Do you want to complete this order?")){
+        $.ajax({
+            url :baseUrl + '/update-order-user',
+            type: 'PUT',
+            contentType: "application/JSON",
+            data: JSON.stringify(orderData),
+            success:function(){
+                console.log('success')
+                location.reload()
+            },
+            error: function () {
+                alert("Error");
+            }
+        })
+    }
+    
+}
 
+function cancelOrder(id){
+    var orderData = {
+        orderId : id,
+        status : 'Cancel'
+    }
+    console.log(orderData)
+    if(confirm("Do you want to cancel this order?")){
+        $.ajax({
+            url :baseUrl + '/update-order-user',
+            type: 'PUT',
+            contentType: "application/JSON",
+            data: JSON.stringify(orderData),
+            success:function(){
+                console.log('success')
+                location.reload()
+            },
+            error: function () {
+                alert("Error");
+            }
+        })
+    }
+    
+}
 
 function submitReview(){
     var reviewData = {

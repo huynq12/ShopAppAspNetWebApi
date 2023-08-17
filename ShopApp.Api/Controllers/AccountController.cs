@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Net.WebSockets;
+using ShopApp.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShopApp.Api.Controllers
 {
@@ -32,6 +34,8 @@ namespace ShopApp.Api.Controllers
 			_configuration = configuration;
 			_httpContextAccessor = httpContextAccessor;
 		}
+
+		[Authorize(Roles = "Admin")]
 		[HttpGet("/users")]
 		public async Task<IActionResult> GetUsers()
 		{
@@ -39,6 +43,7 @@ namespace ShopApp.Api.Controllers
 			return Ok(listUsers);
 		}
 
+		[Authorize]
 		[HttpGet("/profile")]
 		public async Task<IActionResult> GetUserInfo()
 		{
@@ -52,12 +57,28 @@ namespace ShopApp.Api.Controllers
 			return Ok(user);
 		}
 
+		[Authorize]
 		[HttpPut("/update-user")]
-		public async Task<IActionResult> Update()
+		public async Task<IActionResult> Update(UpdateUserRequest request)
+		{
+            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            if (userName == null)
+                return BadRequest();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return NotFound();
+			user.FullName = request.FullName;
+			user.PhoneNumber = request.PhoneNumber;
+			user.Address = request.Address;
+			var result = await _userManager.UpdateAsync(user);
+			if (!result.Succeeded)
+				return BadRequest();
+            return Ok(user);
+        }
 
 
 		[HttpPost("/login")]
-
 		public async Task<IActionResult> Login([FromBody] LoginModel model)
 		{
 			var user = await _userManager.FindByNameAsync(model.Email);
@@ -89,7 +110,6 @@ namespace ShopApp.Api.Controllers
 		
 
 		[HttpPost("/register")]
-
 		public async Task<IActionResult> Register([FromBody] RegisterModel model)
 		{
 			var userExists = await _userManager.FindByEmailAsync(model.Email);

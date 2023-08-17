@@ -132,25 +132,13 @@ $(document).ready(function () {
 					reviewHtml += '<div class="col-md-6"><div class="card mb-4"><div class="card-body">'
 					reviewHtml += '<h4 class="card-title">'+item.userName+'</h4>'
 					reviewHtml += '<p class-text>'
-					for(let i=1 ; i <= res.$values.length;i++){
+					for(let i=1 ; i <= item.rating;i++){
 						reviewHtml +=star
 					}
 					reviewHtml += '</p>'
 					reviewHtml += '<p class="card-text">'+item.commentMsg+'</p>'
 					reviewHtml += '</div></div></div>'
-					//   `
-					// 		<div class="col-md-6" >
-					// 			<div class="card mb-4"  >
-					// 				<div class="card-body">
-					// 					<h4 class="card-title">${item.userName}</h5>
-					// 					<p class="card-text">
-											
-					// 					</p>
-					// 					<p class="card-text"></p>
-					// 				</div>
-					// 			</div>
-					// 		</div>
-					// `
+					
 
 				}
                 $('#reviewCount').html(reviewCount)

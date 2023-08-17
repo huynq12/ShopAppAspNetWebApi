@@ -7,7 +7,7 @@ using ShopApp.Models;
 using ShopApp.Models.DTOs;
 using System.Net.WebSockets;
 using System.IO;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShopApp.Api.Controllers
 {
@@ -30,6 +30,8 @@ namespace ShopApp.Api.Controllers
             _hostingEnvironment = hostingEnvironment;
             _imageRepository = imageRepository;
         }
+
+
 		[HttpGet("/products")]
 		public async Task<IActionResult> GetProducts()
 		{
@@ -50,6 +52,7 @@ namespace ShopApp.Api.Controllers
 			var data = new { data = listDto, recordsTotal };
 			return Ok(data);
 		}
+
 
 		[HttpGet("/product/{id}")]
 		public async Task<IActionResult> GetOne(int id)
@@ -91,6 +94,7 @@ namespace ShopApp.Api.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("/create-product")]
 		public async Task<IActionResult> Create([FromBody]AddProductRequest request)
 		{
@@ -130,6 +134,9 @@ namespace ShopApp.Api.Controllers
 
             return Ok(result);
         }
+
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("/edit-product")]
         public async Task<IActionResult> Update(AddProductRequest request)
         {
@@ -178,6 +185,7 @@ namespace ShopApp.Api.Controllers
             return Ok(updatedProduct);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("/delete-product/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

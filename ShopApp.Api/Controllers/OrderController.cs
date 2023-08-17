@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
@@ -28,12 +29,15 @@ namespace ShopApp.Api.Controllers
 			_productRepository = productRepository;
         }
 
+		[Authorize(Roles ="Admin")]
 		[HttpGet("/orders")]
 		public async Task<IActionResult> GetOrders()
 		{
 			var list = await _orderRepository.GetOrders();
 			return Ok(list);
 		}
+
+		[Authorize]
 		[HttpGet("/order/{id}")]
 		public async Task<IActionResult> GetOrder(int id)
 		{
@@ -42,6 +46,8 @@ namespace ShopApp.Api.Controllers
 				return NotFound();
 			return Ok(order);
 		}
+
+		[Authorize]
 		[HttpGet("/user-orders")]
 		public async Task<IActionResult> GetOrdersByUser()
 		{
@@ -52,14 +58,15 @@ namespace ShopApp.Api.Controllers
 			return Ok(listOrders);
 		}
 
-		[HttpGet("/orders-by")]
+		[Authorize(Roles ="Admin")]
+		[HttpGet("/orders-by/{userEmail}")]
 		public async Task<IActionResult> GetOrdersByUser(string userEmail)
 		{
 			var listOrders = await _orderRepository.GetOrdersByUser(userEmail);
 			return Ok(listOrders);
 		}
-		
 
+		[Authorize]
 		[HttpPost("/place-order")]
 		public async Task<IActionResult> PlaceOrder(PlaceOrderRequest request)
 		{
@@ -68,7 +75,7 @@ namespace ShopApp.Api.Controllers
 
 			var user = _httpContextAccessor.HttpContext.User.Identity.Name;
 			if (user == null)
-				return BadRequest();
+				return BadRequest("Unauthorized");
 
 			var order = new Order()
 			{
@@ -85,10 +92,10 @@ namespace ShopApp.Api.Controllers
 				{
 					var product = await _productRepository.GetProductById(cartItem.ProductId);
 					if (product == null)
-						return NotFound();
+						return NotFound("The product is not exist");
 
 					if(product.Quantity < cartItem.Quantity)
-						return BadRequest();
+						return BadRequest("The product quantity is not enough");
 
 					order.OrderDetails.Add(new OrderDetail
 					{
@@ -105,19 +112,17 @@ namespace ShopApp.Api.Controllers
 			return Ok(result);
 		}
 
-		[HttpPut("/update-order")]
+
+		[Authorize(Roles ="Admin")]
+		[HttpPut("/update-order-admin")]
 		public async Task<IActionResult> Update(UpdateOrderRequest request)
 		{
 			var existingOrder = await _orderRepository.GetOrderById(request.OrderId);
 			if (existingOrder == null)
-				return NotFound();
+				return NotFound("Cannot find the order");
 
-			var user = _httpContextAccessor.HttpContext.User.Identity.Name;
-			if (user == null || user != existingOrder.User)
-				return BadRequest();
-
-			if (existingOrder.Status == OrderStatus.Complete || existingOrder.Status == OrderStatus.Cancel)
-				return BadRequest();
+			if (existingOrder.Status == OrderStatus.Complete || existingOrder.Status == OrderStatus.Cancel || existingOrder.Status == OrderStatus.Shipped)
+				return BadRequest("Invalid order");
 
 			switch (request.Status)
 			{
@@ -126,10 +131,10 @@ namespace ShopApp.Api.Controllers
                     {
                         var product = await _productRepository.GetProductById(item.ProductId);
                         if (product == null)
-                            return NotFound();
+                            return NotFound("Cannot find the product");
 
                         if (product.Quantity < item.Amount)
-                            return BadRequest();
+                            return BadRequest("The product quantity is not valid");
                     }
                     existingOrder.Status = OrderStatus.Processing;
 					break;
@@ -141,7 +146,7 @@ namespace ShopApp.Api.Controllers
                             return NotFound();
 
                         if (product.Quantity < item.Amount)
-                            return BadRequest();
+                            return BadRequest("The product quantity is not valid");
 
                         product.Quantity -= item.Amount;
                         product.SoldQuantity += item.Amount;
@@ -149,32 +154,54 @@ namespace ShopApp.Api.Controllers
                     }
                     existingOrder.Status = OrderStatus.Shipped;
 					break;
-				case OrderStatus.Complete:
-					existingOrder.Status = OrderStatus.Complete;
-					break;
-				case OrderStatus.Cancel:
-					existingOrder.Status = OrderStatus.Cancel;
-					break;
-				
 			}
-			var updatedOrder = await _orderRepository.Update(existingOrder);
-			return Ok(updatedOrder);
+			await _orderRepository.Update(existingOrder);
+			return Ok("Update order successfully");
 		}
 
+
+		[Authorize]
+		[HttpPut("/update-order-user")]
+		public async Task<IActionResult> UpdateUserOrder(UpdateOrderRequest request)
+		{
+            var existingOrder = await _orderRepository.GetOrderById(request.OrderId);
+            if (existingOrder == null)
+                return NotFound();
+
+            var user = _httpContextAccessor.HttpContext.User.Identity.Name;
+            if (user == null || user != existingOrder.User)
+                return BadRequest("Unauthorized");
+
+            if (existingOrder.Status == OrderStatus.Complete || existingOrder.Status == OrderStatus.Cancel)
+                return BadRequest();
+
+			switch (request.Status)
+			{
+				case OrderStatus.Complete:
+					if (existingOrder.Status != OrderStatus.Shipped)
+						return BadRequest();
+					existingOrder.Status = OrderStatus.Complete;
+					break;
+
+				case OrderStatus.Cancel:
+					if (existingOrder.Status == OrderStatus.Shipped)
+						return BadRequest();
+					existingOrder.Status = OrderStatus.Cancel;
+					break;
+			}
+            await _orderRepository.Update(existingOrder);
+            return Ok("Update order successfully");
+        }
+
+
+		[Authorize(Roles ="Admin")]
 		[HttpDelete("/delete-order/{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
 			var order = await _orderRepository.GetOrderById(id);
 			if (order == null)
 				return NotFound();
-			/*foreach (var item in order.OrderDetails)
-			{
-				var product = await _productRepository.GetProductById(item.ProductId);
-				if (product == null)
-					return NotFound();
-				product.Quantity += item.Amount;
-				await _productRepository.Update(product);
-			}*/
+
 			var deletedOrder = await _orderRepository.Delete(order);
 			
 			return Ok(deletedOrder);
